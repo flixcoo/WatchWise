@@ -1,10 +1,10 @@
-# Movie Tracker
+# WatchWise
 
-Entdecke und organisiere deine Filmsammlung wie nie zuvor! Mit MovieCatalog kannst du deine Filme mÅhelos mit vorgefertigten Kategorien katalogisieren, eigene Kategorien nach Belieben erstellen sowie personalisierte Empfehlungen auf deinen Vorlieben erhalten. Egal, ob du ein Filmkenner bist oder einfach nur deine Lieblingsfilme im Blick behalten mîchtest. MovieCatalog bietet dir alle Tools die du brauchst.
+Entdecke und organisiere deine Filmsammlung wie nie zuvor! Mit WatchWise kannst du deine Filme m√ºhelos mit vorgefertigten Kategorien katalogisieren, eigene Kategorien nach Belieben erstellen sowie personalisierte Empfehlungen auf deinen Vorlieben erhalten. Egal, ob du ein Filmkenner bist oder einfach nur deine Lieblingsfilme im Blick behalten m√∂chtest. MovieCatalog bietet dir alle Tools die du brauchst.
 
 ## Hauptfeatures
 
-- Einfaches HinzufÅgen und Suchen von Filmen: Durchsuche eine riesige Filmdatenbank, um Filme zu deiner Sammlung hinzufÅgen.
-- Detaillierte Film-Infos: Erhalte alle wichtigen Infos zu deinen Filmen - von der Besetzung Åber die Handlung bis hin zu Benutzerbewertungen.
+- Einfaches Hinzuf√ºgen und Suchen von Filmen: Durchsuche eine riesige Filmdatenbank, um Filme zu deiner Sammlung hinzuf√ºgen.
+- Detaillierte Film-Infos: Erhalte alle wichtigen Infos zu deinen Filmen - von der Besetzung √ºber die Handlung bis hin zu Benutzerbewertungen.
 - Personalisierte Kategorien: Organisiere deine Filme in eigen-erstellten Kategorien wie ?Favoriten? oder ?Noch zu sehen? oder bediene dich an unserer riesigen Auswahl an vorgefertigten Kategorien
-- Empfehlungen und Statistiken: Basierend auf deiner Filmsammlung erhÑltst du ma·geschneiderte Empfehlungen und spannende Statistiken Åber deine Filmgewohnheiten.
+- Empfehlungen und Statistiken: Basierend auf deiner Filmsammlung erh√§ltst du ma√ügeschneiderte Empfehlungen und spannende Statistiken √ºber deine Filmgewohnheiten.
