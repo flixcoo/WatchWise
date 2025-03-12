@@ -1,10 +1,55 @@
+[![API](https://img.shields.io/badge/API-23%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=23)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+
 # WatchWise
 
-Entdecke und organisiere deine Filmsammlung wie nie zuvor! Mit WatchWise kannst du deine Filme mühelos mit vorgefertigten Kategorien katalogisieren, eigene Kategorien nach Belieben erstellen sowie personalisierte Empfehlungen auf deinen Vorlieben erhalten. Egal, ob du ein Filmkenner bist oder einfach nur deine Lieblingsfilme im Blick behalten möchtest. MovieCatalog bietet dir alle Tools die du brauchst.
+### An application to search, watch and save movies, TV shows and popular people.
 
-## Hauptfeatures
+![Image1](app/images/watchwise_github_pic1.png)
 
-- Einfaches Hinzufügen und Suchen von Filmen: Durchsuche eine riesige Filmdatenbank, um Filme zu deiner Sammlung hinzufügen.
-- Detaillierte Film-Infos: Erhalte alle wichtigen Infos zu deinen Filmen - von der Besetzung über die Handlung bis hin zu Benutzerbewertungen.
-- Personalisierte Kategorien: Organisiere deine Filme in eigen-erstellten Kategorien wie ?Favoriten? oder ?Noch zu sehen? oder bediene dich an unserer riesigen Auswahl an vorgefertigten Kategorien
-- Empfehlungen und Statistiken: Basierend auf deiner Filmsammlung erhältst du maßgeschneiderte Empfehlungen und spannende Statistiken über deine Filmgewohnheiten.
+
+![Image2](app/images/watchwise_github_pic2.png)
+
+## Description
+Multi-module application with one activity and many fragments.
+
+The main screen contains lists of popular movies, TV shows and people. Also a list of now watching movies on the main screen.
+
+After clicking the show more button, screens will open where films (top, popular, etc.), TV shows (top, popular, etc.) and popular people are presented.
+
+It is possible to view detailed information about a movie, TV show or person and add it to favorites.
+
+The search screen allows you to search by movies, TV shows, and people.
+
+The Favorites screen contains your favorite movies, TV shows, and people.
+
+## Configurations
+The application is built using command build.gradle.
+
+The app contains an activity that manages fragments.
+
+Used MVI pattern.
+
+A navigation component is used to navigate between fragments.
+Dagger2 is used for dependency injection.
+
+***
+#### Used libraries:
+* **dagger2** - for dependency injection.
+* **coroutines** - to perform async tasks.
+* **room** - to save data in the database.
+* **retrofit2** - to download data from the network.
+* **glide** - to upload images.
+***
+
+
+
+## Usage
+An application to search, watch and save movies, TV shows and popular people.
+
+If you want to run the application, then you need to get an api key on the site https://www.themoviedb.org and place "your_key" in keystore.properties in the field THE_MOVIE_DATABASE_API_KEY="your_key"
+
+## TODO list
+* add module - Settings
+* add statistics
+* add profiles
