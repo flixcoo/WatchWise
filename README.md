@@ -5,11 +5,6 @@
 
 ### An application to search, watch and save movies, TV shows and popular people.
 
-![Image1](app/images/watchwise_github_pic1.png)
-
-
-![Image2](app/images/watchwise_github_pic2.png)
-
 ## Description
 Multi-module application with one activity and many fragments.
 
