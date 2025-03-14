@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,44 +41,60 @@ fun ProfileScreen() {
                 .background(AppTheme.colors.background.default)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.Center
         ) {
-            // Aktuelles Profil anzeigen
-            Text(
-                text = "Aktives Profil:",
-                style = AppTheme.typography.title3,
-                color = AppTheme.colors.type.secondary
-            )
-
-            Text(
-                text = activeProfile,
-                style = AppTheme.typography.title2,
-                color = AppTheme.colors.type.primary
-            )
-
-            // Profil ändern
-            Button(
-                onClick = {
-                    // Navigation zu einer Profilauswahl implementieren
-                },
-                modifier = Modifier.fillMaxWidth()
+            // Profil-Card
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = AppTheme.colors.background.card
+                )
             ) {
-                Text("Profil ändern")
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Aktives Profil",
+                        style = AppTheme.typography.body,
+                        color = AppTheme.colors.type.secondary,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = activeProfile,
+                        style = AppTheme.typography.title2,
+                        color = AppTheme.colors.type.primary,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Profil ändern Button
+                    Button(
+                        onClick = { /* Navigation zur Profilauswahl */ },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Profil ändern")
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Profil löschen Button
+                    Button(
+                        onClick = { activeProfile = "Kein aktives Profil" },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
+                    ) {
+                        Text("Profil löschen")
+                    }
+                }
             }
 
-            // Profil löschen
-            Button(
-                onClick = {
-                    activeProfile = "Kein aktives Profil"
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
-            ) {
-                Text("Profil löschen")
-            }
-
-            // Falls kein Profil existiert, Erstellungsoption anzeigen
+            // Falls kein Profil vorhanden ist
             if (activeProfile == "Kein aktives Profil") {
+                Spacer(modifier = Modifier.height(20.dp))
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
@@ -85,6 +102,8 @@ fun ProfileScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp)
                 )
+
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
                     onClick = {
