@@ -2,37 +2,23 @@ package com.github.nullsafe.watchwise.profile.presentation.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.github.nullsafe.watchwise.compose.components.chips.ChipView
-import com.github.nullsafe.watchwise.compose.components.chips.ChipViewStyle
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    // State für Profil-Handling
     var username by remember { mutableStateOf("") }
-    var selectedProfile by remember { mutableStateOf<String?>(null) }
-    val profileList = remember { mutableStateListOf("Profil 1", "Profil 2") } // Dummy-Daten
+    var activeProfile by remember { mutableStateOf("Standard-Profil") } // Dummy-Daten
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.largeTopAppBarColors().copy(
-                    titleContentColor = AppTheme.colors.type.secondary,
-                    containerColor = AppTheme.colors.theme.tintSelection
-                ),
                 title = {
                     Text(
                         text = "Profile",
@@ -40,7 +26,10 @@ fun ProfileScreen() {
                         color = AppTheme.colors.type.secondary
                     )
                 },
-                scrollBehavior = scrollBehavior
+                colors = TopAppBarDefaults.largeTopAppBarColors().copy(
+                    titleContentColor = AppTheme.colors.type.secondary,
+                    containerColor = AppTheme.colors.theme.tintSelection
+                )
             )
         }
     ) { paddingValues ->
@@ -50,104 +39,65 @@ fun ProfileScreen() {
                 .fillMaxSize()
                 .background(AppTheme.colors.background.default)
                 .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
-            // Profil hinzufügen
+            // Aktuelles Profil anzeigen
             Text(
-                text = "Neues Profil erstellen",
+                text = "Aktives Profil:",
                 style = AppTheme.typography.title3,
                 color = AppTheme.colors.type.secondary
             )
 
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Profilname") },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp)
+            Text(
+                text = activeProfile,
+                style = AppTheme.typography.title2,
+                color = AppTheme.colors.type.primary
             )
 
+            // Profil ändern
             Button(
                 onClick = {
-                    if (username.isNotEmpty()) {
-                        profileList.add(username)
-                        username = ""
-                    }
+                    // Navigation zu einer Profilauswahl implementieren
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Profil erstellen")
+                Text("Profil ändern")
             }
 
-            // Spacer für Trennung
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Bestehende Profile anzeigen
-            Text(
-                text = "Profile verwalten",
-                style = AppTheme.typography.title3,
-                color = AppTheme.colors.type.secondary
-            )
-
-            LazyColumn(
+            // Profil löschen
+            Button(
+                onClick = {
+                    activeProfile = "Kein aktives Profil"
+                },
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
             ) {
-                items(profileList) { profile ->
-                    ProfileItem(
-                        profileName = profile,
-                        onDelete = { profileList.remove(profile) },
-                        onSelect = { selectedProfile = profile }
-                    )
-                }
+                Text("Profil löschen")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Aktuelles Profil
-            if (selectedProfile != null) {
-                Text(
-                    text = "Aktives Profil: $selectedProfile",
-                    style = AppTheme.typography.title3,
-                    color = AppTheme.colors.type.secondary
+            // Falls kein Profil existiert, Erstellungsoption anzeigen
+            if (activeProfile == "Kein aktives Profil") {
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text("Neues Profil") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp)
                 )
 
                 Button(
-                    onClick = { profileList.remove(selectedProfile) },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
+                    onClick = {
+                        if (username.isNotEmpty()) {
+                            activeProfile = username
+                            username = ""
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Profil löschen")
+                    Text("Profil erstellen")
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun ProfileItem(
-    profileName: String,
-    onDelete: () -> Unit,
-    onSelect: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        ChipView(
-            text = profileName,
-            style = ChipViewStyle.Inform,
-            onClick = { onSelect() }
-        )
-
-        Button(
-            onClick = onDelete,
-            colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
-        ) {
-            Text("Löschen")
         }
     }
 }
