@@ -15,7 +15,7 @@ import com.github.nullsafe.watchwise.compose.theme.AppTheme
 @Composable
 fun ProfileScreen() {
     var username by remember { mutableStateOf("") }
-    var activeProfile by remember { mutableStateOf("Standard-Profil") } // Dummy-Daten
+    var activeProfile by remember { mutableStateOf<String?>(null) } // Kein Standard-Profil
 
     Scaffold(
         topBar = {
@@ -43,58 +43,17 @@ fun ProfileScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Profil-Card
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = AppTheme.colors.background.card
+            // Falls kein Profil existiert, Erstellungsoption anzeigen
+            if (activeProfile == null) {
+                Text(
+                    text = "Kein aktives Profil vorhanden",
+                    style = AppTheme.typography.body,
+                    color = AppTheme.colors.type.secondary,
+                    textAlign = TextAlign.Center
                 )
-            ) {
-                Column(
-                    modifier = Modifier.padding(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Aktives Profil",
-                        style = AppTheme.typography.body,
-                        color = AppTheme.colors.type.secondary,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = activeProfile,
-                        style = AppTheme.typography.title2,
-                        color = AppTheme.colors.type.primary,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
 
-                    // Profil ändern Button
-                    Button(
-                        onClick = { /* Navigation zur Profilauswahl */ },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Profil ändern")
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // Profil löschen Button
-                    Button(
-                        onClick = { activeProfile = "Kein aktives Profil" },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
-                    ) {
-                        Text("Profil löschen")
-                    }
-                }
-            }
-
-            // Falls kein Profil vorhanden ist
-            if (activeProfile == "Kein aktives Profil") {
                 Spacer(modifier = Modifier.height(20.dp))
+
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
@@ -115,6 +74,55 @@ fun ProfileScreen() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Profil erstellen")
+                }
+            } else {
+                // Profil-Card
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = AppTheme.colors.background.card
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Aktives Profil",
+                            style = AppTheme.typography.body,
+                            color = AppTheme.colors.type.secondary,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = activeProfile!!,
+                            style = AppTheme.typography.title2,
+                            color = AppTheme.colors.type.primary,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        // Profil ändern Button
+                        Button(
+                            onClick = { /* Navigation zur Profilauswahl */ },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Profil ändern")
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Profil löschen Button
+                        Button(
+                            onClick = { activeProfile = null },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
+                        ) {
+                            Text("Profil löschen")
+                        }
+                    }
                 }
             }
         }
