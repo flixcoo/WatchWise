@@ -71,7 +71,11 @@ fun ProfileScreen() {
                             username = ""
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AppTheme.colors.theme.tint,
+                        contentColor = AppTheme.colors.type.inverse
+                    )
                 ) {
                     Text("Profil erstellen")
                 }
