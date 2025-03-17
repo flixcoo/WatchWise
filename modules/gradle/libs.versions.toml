@@ -50,6 +50,7 @@ foundationAndroid = "1.7.7"
 pagingComposeAndroid = "3.3.6"
 uiAndroid = "1.7.7"
 uiAndroidVersion = "1.7.6"
+foundationAndroidVersion = "1.7.6"
 
 [libraries]
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
@@ -110,3 +111,4 @@ foundation-android = { group = "androidx.compose.foundation", name = "foundation
 paging-compose-android = { group = "androidx.paging", name = "paging-compose-android", version.ref = "pagingComposeAndroid" }
 ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
 androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroidVersion" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroidVersion" }

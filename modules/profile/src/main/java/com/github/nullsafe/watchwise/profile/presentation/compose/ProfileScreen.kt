@@ -3,10 +3,14 @@ package com.github.nullsafe.watchwise.profile.presentation.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
@@ -57,9 +61,30 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Neues Profil") },
+                    placeholder = {
+                        Text(
+                            text = "Neues Profil",
+                            color = AppTheme.colors.type.secondary
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = AppTheme.colors.background.card,
+                        unfocusedContainerColor = AppTheme.colors.background.card,
+                        disabledContainerColor = AppTheme.colors.background.card,
+                        cursorColor = AppTheme.colors.type.primary,
+                        focusedTextColor = AppTheme.colors.type.primary,
+                        unfocusedTextColor = AppTheme.colors.type.primary,
+                        focusedIndicatorColor = AppTheme.colors.type.primary,
+                        unfocusedIndicatorColor = AppTheme.colors.type.secondary
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions.Default
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
