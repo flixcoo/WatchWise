@@ -58,19 +58,18 @@ fun ProfileScreen() {
         ) {
             if (activeProfile == null) {
                 Text(
-                    text = "Kein aktives Profil vorhanden",
-                    style = AppTheme.typography.title2, // Größere Schriftgröße
+                    text = "No active profile available",
+                    style = AppTheme.typography.title2,
                     color = AppTheme.colors.type.secondary,
                     textAlign = TextAlign.Center
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Benutzername-Eingabefeld mit Icon
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    placeholder = { Text("Neues Profil", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text("Username", color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -83,7 +82,7 @@ fun ProfileScreen() {
                         unfocusedIndicatorColor = AppTheme.colors.type.secondary
                     ),
                     singleLine = true,
-                    leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Profil-Icon") }, // Icon hinzugefügt
+                    leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Profile Icon") },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Next
@@ -92,11 +91,10 @@ fun ProfileScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Passwort-Eingabefeld mit Icon
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("Passwort", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text("Password", color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -109,7 +107,7 @@ fun ProfileScreen() {
                         unfocusedIndicatorColor = AppTheme.colors.type.secondary
                     ),
                     singleLine = true,
-                    leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Passwort-Icon") }, // Icon hinzugefügt
+                    leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Password Icon") },
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Password,
@@ -118,7 +116,7 @@ fun ProfileScreen() {
                     trailingIcon = {
                         val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(imageVector = image, contentDescription = "Passwort sichtbar")
+                            Icon(imageVector = image, contentDescription = "Toggle Password Visibility")
                         }
                     }
                 )
@@ -142,7 +140,7 @@ fun ProfileScreen() {
                         contentColor = AppTheme.colors.type.inverse
                     )
                 ) {
-                    Text("Profil erstellen", style = AppTheme.typography.title2)
+                    Text("Create Profile", style = AppTheme.typography.title2)
                 }
             } else {
                 Card(
@@ -157,10 +155,9 @@ fun ProfileScreen() {
                         modifier = Modifier.padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Profil-Icon für aktives Profil
                         Icon(
                             imageVector = Icons.Filled.Person,
-                            contentDescription = "Profilbild",
+                            contentDescription = "Profile Picture",
                             tint = AppTheme.colors.type.primary,
                             modifier = Modifier
                                 .size(64.dp)
@@ -172,7 +169,7 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = "Aktives Profil",
+                            text = "Active Profile",
                             style = AppTheme.typography.body,
                             color = AppTheme.colors.type.secondary,
                             textAlign = TextAlign.Center
@@ -187,14 +184,14 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(20.dp))
 
                         Button(
-                            onClick = { /* Navigation zur Profilauswahl */ },
+                            onClick = { /* Navigate to profile selection */ },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF555555) // Dunkleres Grau
+                                containerColor = Color(0xFF555555)
                             )
                         ) {
-                            Text("Profil ändern")
+                            Text("Change Profile")
                         }
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -203,10 +200,10 @@ fun ProfileScreen() {
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = AppTheme.colors.type.alert.copy(alpha = 0.7f) // Etwas sanfteres Rot
+                                containerColor = AppTheme.colors.type.alert.copy(alpha = 0.7f)
                             )
                         ) {
-                            Text("Profil löschen")
+                            Text("Delete Profile")
                         }
                     }
                 }
