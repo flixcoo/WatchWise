@@ -2,19 +2,24 @@ package com.github.nullsafe.watchwise.profile.presentation.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,14 +70,9 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    placeholder = {
-                        Text(
-                            text = "Neues Profil",
-                            color = AppTheme.colors.type.secondary
-                        )
-                    },
+                    placeholder = { Text("Neues Profil", color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = AppTheme.colors.background.card,
                         unfocusedContainerColor = AppTheme.colors.background.card,
@@ -96,14 +96,9 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = {
-                        Text(
-                            text = "Passwort",
-                            color = AppTheme.colors.type.secondary
-                        )
-                    },
+                    placeholder = { Text("Passwort", color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = AppTheme.colors.background.card,
                         unfocusedContainerColor = AppTheme.colors.background.card,
@@ -128,7 +123,7 @@ fun ProfileScreen() {
                     }
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = {
@@ -139,6 +134,7 @@ fun ProfileScreen() {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = AppTheme.colors.theme.tint,
                         contentColor = AppTheme.colors.type.inverse
@@ -150,16 +146,29 @@ fun ProfileScreen() {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        .shadow(8.dp, RoundedCornerShape(12.dp)),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = AppTheme.colors.background.card
-                    )
+                    colors = CardDefaults.cardColors(containerColor = AppTheme.colors.background.card)
                 ) {
                     Column(
                         modifier = Modifier.padding(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        // Profil-Icon
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Profilbild",
+                            tint = AppTheme.colors.type.primary,
+                            modifier = Modifier
+                                .size(64.dp)
+                                .clip(CircleShape)
+                                .background(AppTheme.colors.background.ghost)
+                                .padding(12.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
                         Text(
                             text = "Aktives Profil",
                             style = AppTheme.typography.body,
@@ -177,7 +186,12 @@ fun ProfileScreen() {
 
                         Button(
                             onClick = { /* Navigation zur Profilauswahl */ },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = AppTheme.colors.theme.tint,
+                                contentColor = Color.White
+                            )
                         ) {
                             Text("Profil ändern")
                         }
@@ -186,7 +200,11 @@ fun ProfileScreen() {
                         Button(
                             onClick = { activeProfile = null },
                             modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.type.alert)
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF444444),
+                                contentColor = Color.White
+                            )
                         ) {
                             Text("Profil löschen")
                         }
