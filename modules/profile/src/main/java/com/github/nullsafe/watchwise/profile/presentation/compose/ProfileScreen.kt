@@ -4,9 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -52,21 +52,21 @@ fun ProfileScreen() {
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(AppTheme.colors.background.default)
-                .padding(16.dp),
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             if (activeProfile == null) {
                 Text(
                     text = "Kein aktives Profil vorhanden",
-                    style = AppTheme.typography.body,
+                    style = AppTheme.typography.title2, // Größere Schriftgröße
                     color = AppTheme.colors.type.secondary,
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-                // Benutzername-Eingabefeld
+                // Benutzername-Eingabefeld mit Icon
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
@@ -83,16 +83,16 @@ fun ProfileScreen() {
                         unfocusedIndicatorColor = AppTheme.colors.type.secondary
                     ),
                     singleLine = true,
+                    leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Profil-Icon") }, // Icon hinzugefügt
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Text,
+                        keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions.Default
+                    )
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                // Passwort-Eingabefeld
+                // Passwort-Eingabefeld mit Icon
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -109,21 +109,21 @@ fun ProfileScreen() {
                         unfocusedIndicatorColor = AppTheme.colors.type.secondary
                     ),
                     singleLine = true,
+                    leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Passwort-Icon") }, // Icon hinzugefügt
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done
                     ),
-                    keyboardActions = KeyboardActions.Default,
                     trailingIcon = {
                         val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(imageVector = image, contentDescription = "Toggle Password Visibility")
+                            Icon(imageVector = image, contentDescription = "Passwort sichtbar")
                         }
                     }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
                     onClick = {
@@ -133,14 +133,16 @@ fun ProfileScreen() {
                             password = ""
                         }
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = AppTheme.colors.theme.tint,
+                        containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
                         contentColor = AppTheme.colors.type.inverse
                     )
                 ) {
-                    Text("Profil erstellen")
+                    Text("Profil erstellen", style = AppTheme.typography.title2)
                 }
             } else {
                 Card(
@@ -152,10 +154,10 @@ fun ProfileScreen() {
                     colors = CardDefaults.cardColors(containerColor = AppTheme.colors.background.card)
                 ) {
                     Column(
-                        modifier = Modifier.padding(20.dp),
+                        modifier = Modifier.padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Profil-Icon
+                        // Profil-Icon für aktives Profil
                         Icon(
                             imageVector = Icons.Filled.Person,
                             contentDescription = "Profilbild",
@@ -189,8 +191,7 @@ fun ProfileScreen() {
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = AppTheme.colors.theme.tint,
-                                contentColor = Color.White
+                                containerColor = Color(0xFF555555) // Dunkleres Grau
                             )
                         ) {
                             Text("Profil ändern")
@@ -202,8 +203,7 @@ fun ProfileScreen() {
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF444444),
-                                contentColor = Color.White
+                                containerColor = AppTheme.colors.type.alert.copy(alpha = 0.7f) // Etwas sanfteres Rot
                             )
                         ) {
                             Text("Profil löschen")
