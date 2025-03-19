@@ -376,7 +376,7 @@ fun AppNavigation(
             startDestination = AppNavRoutes.Profile.route,
             route = AppNavRoutes.ProfileGraph.route
         ) {
-            composable(AppNavRoutes.Profile.route) { ProfileScreen(navController = navController) }
+            composable(AppNavRoutes.Profile.route) { ProfileScreen() }
         }
     }
 }
