@@ -65,7 +65,6 @@ dependencies {
     implementation(project(":detail"))
     implementation(project(":compose"))
 
-
     // Libraries from version catalog
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)
