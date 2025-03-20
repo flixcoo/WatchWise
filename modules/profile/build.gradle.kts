@@ -63,12 +63,17 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":util"))
     implementation(project(":detail"))
+    implementation(project(":compose"))
 
     // Libraries from version catalog
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)
 
     implementation(libs.dagger.android.support)
+    implementation(libs.ui.android)
+    implementation(libs.ui.android)
+    implementation(libs.androidx.ui.android)
+    implementation(libs.androidx.ui.android)
     kapt(libs.dagger.compiler)
     kapt(libs.dagger.android.processor)
     implementation(libs.navigation.fragment)
