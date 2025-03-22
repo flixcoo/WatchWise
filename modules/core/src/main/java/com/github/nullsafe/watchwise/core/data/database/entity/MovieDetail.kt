@@ -29,6 +29,9 @@ data class MovieDetail(
     val backdropPath: String?,
     val posterPath: String?,
     val liked: Boolean,
+    val isUnwatched: Boolean = false, // Neue Spalte für "Noch nicht gesehen"
+    val isWatched: Boolean = false, // Neue Spalte für "Schon gesehen"
+    val isFavourite: Boolean = false, // Neue Spalte für "Favoriten"
     val creditsCasts: List<CreditsCast>,
     val similarMovies: List<Movie>
 )

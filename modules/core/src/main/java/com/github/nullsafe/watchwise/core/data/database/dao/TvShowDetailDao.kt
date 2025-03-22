@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TvShowDetailDao {
+
     @Query("SELECT * FROM TvShowDetail WHERE id = :id")
     suspend fun getById(id: Int): TvShowDetail?
 
@@ -30,4 +31,22 @@ interface TvShowDetailDao {
 
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
     fun getSavedTvShows(): Flow<List<TvShowDetail>>
+
+    // Neue Abfragen für die Kategorien
+    @Query("SELECT * FROM TvShowDetail WHERE isWatched = 0 AND liked = 0")
+    fun getTvShowsToWatch(): Flow<List<TvShowDetail>>
+
+    @Query("SELECT * FROM TvShowDetail WHERE isWatched = 1")
+    fun getTvShowsSeen(): Flow<List<TvShowDetail>>
+
+    @Query("SELECT * FROM TvShowDetail WHERE isFavourite = 1")
+    fun getTvShowsFavourites(): Flow<List<TvShowDetail>>
+
+    // Methode zum Markieren einer Serie als "gesehen"
+    @Update
+    suspend fun markTvShowAsWatched(tvShow: TvShowDetail)
+
+    // Methode zum Markieren einer Serie als "Favorit"
+    @Update
+    suspend fun markTvShowAsFavourite(tvShow: TvShowDetail)
 }
