@@ -7,11 +7,16 @@ import com.github.nullsafe.watchwise.liked.presentation.model.WatchlistTabModel
 data class WatchlistState(
     val tabs: List<WatchlistTabModel> = WatchlistTabModel.createTabList(),
     val initialTabPosition: Int = 0,
-    val movies: List<MovieDetail> = emptyList(),
-    val tvShows: List<TvShowDetail> = emptyList(),
-    val moviesLoading: Boolean = true,
-    val tvShowsLoading: Boolean = true
+    val toWatch: List<WatchlistItem> = emptyList(),
+    val seen: List<WatchlistItem> = emptyList(),
+    val favourites: List<WatchlistItem> = emptyList(),
+    val isLoading: Boolean = true
 )
+
+sealed class WatchlistItem {
+    data class Movie(val movieDetail: MovieDetail) : WatchlistItem()
+    data class TvShow(val tvShowDetail: TvShowDetail) : WatchlistItem()
+}
 
 sealed interface WatchlistAction {
     data class OpenMovieDetail(val movieId: Int) : WatchlistAction

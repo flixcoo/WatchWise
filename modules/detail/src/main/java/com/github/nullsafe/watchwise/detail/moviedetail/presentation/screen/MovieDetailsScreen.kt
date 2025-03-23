@@ -121,12 +121,12 @@ fun MovieDetailsScreen(
 
                                         val message = if (liked) {
                                             context.getString(
-                                                R.string.added_to_watchlist,
+                                                R.string.added_to_favorites,
                                                 state.movie.title.orEmpty()
                                             )
                                         } else {
                                             context.getString(
-                                                R.string.removed_from_watchlist,
+                                                R.string.removed_from_favorites,
                                                 state.movie.title.orEmpty()
                                             )
                                         }

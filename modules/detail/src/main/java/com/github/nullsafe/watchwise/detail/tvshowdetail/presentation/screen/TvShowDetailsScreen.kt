@@ -119,12 +119,12 @@ fun TvShowDetailsScreen(
 
                                         val message = if (liked) {
                                             context.getString(
-                                                R.string.added_to_watchlist,
+                                                R.string.added_to_favorites,
                                                 state.tvShow.name.orEmpty()
                                             )
                                         } else {
                                             context.getString(
-                                                R.string.removed_from_watchlist,
+                                                R.string.removed_from_favorites,
                                                 state.tvShow.name.orEmpty()
                                             )
                                         }

@@ -95,14 +95,17 @@
         <item quantity="other">%1$d Staffeln</item>
     </plurals>
 
-    <string name="added_to_watchlist">%1$s zur Merkliste hinzugefügt</string>
-    <string name="removed_from_watchlist">%1$s aus der Merkliste entfernt</string>
+    <string name="added_to_favorites">%1$s zu Favoriten hinzugefügt</string>
+    <string name="removed_from_favorites">%1$s aus Favoriten entfernt</string>
 
     <string name="movies">Filme</string>
     <string name="tv_shows">Serien</string>
 
-    <string name="watchlist_empty_message_movies">Du hast noch keine Filme hinzugefügt. Beginne damit, deine Favoriten zur Merkliste hinzuzufügen!</string>
-    <string name="watchlist_empty_message_tv_shows">Noch keine Serien hinzugefügt. Füge Serien, die du später ansehen möchtest, zu deiner Merkliste hinzu!</string>
+    <string name="to_watch">Noch zu sehen</string>
+    <string name="seen">Gesehen</string>
+    <string name="favourites">Favoriten</string>
+
+    <string name="watchlist_empty_message">Noch keine Filme oder Serien hinzugefügt. Füge jetzt welche hinzu!</string>
     <string name="watchlist_empty_action">Filme und Serien durchsuchen</string>
 
     <string name="settings">Einstellungen</string>
