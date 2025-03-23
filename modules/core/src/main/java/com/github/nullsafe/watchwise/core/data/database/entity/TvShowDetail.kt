@@ -48,9 +48,9 @@ data class TvShowDetail(
     val voteAverage: Double?,
     val voteCount: Int?,
     val liked: Boolean,
-    val isUnwatched: Boolean = false, // Neue Spalte für "Noch nicht gesehen"
-    val isWatched: Boolean = false, // Neue Spalte für "Schon gesehen"
-    val isFavourite: Boolean = false, // Neue Spalte für "Favoriten"
+    val isUnwatched: Boolean = false,
+    val isWatched: Boolean = false,
+    val isFavourite: Boolean = false,
     val creditsCasts: List<CreditsCast>,
     val similarTvShows: List<TvShow>,
 )
