@@ -34,19 +34,19 @@ class WatchlistViewModel @Inject constructor(
     private val _effect = Channel<WatchlistEffect>()
     val effect = _effect.receiveAsFlow()
 
-    private val moviesToWatch = movieDao.getMoviesToWatch()
+    private val moviesToWatch = movieDao.getMoviesUnwatch()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val moviesSeen = movieDao.getMoviesSeen()
+    private val moviesSeen = movieDao.getMoviesWatched()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     private val moviesFavourites = movieDao.getMoviesFavourites()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val tvShowsToWatch = tvShowDao.getTvShowsToWatch()
+    private val tvShowsToWatch = tvShowDao.getTvShowsUnwatched()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val tvShowsSeen = tvShowDao.getTvShowsSeen()
+    private val tvShowsSeen = tvShowDao.getTvShowsWatched()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     private val tvShowsFavourites = tvShowDao.getTvShowsFavourites()

@@ -68,7 +68,15 @@ interface TvShowsRepository {
 
     suspend fun toggleTvShowLike(tvShow: TvShowDetail)
 
+    suspend fun toggleTvShowWatched(tvShow: TvShowDetail)
+
+    suspend fun toggleTvShowUnwatched(tvShow: TvShowDetail)
+
     suspend fun isTvShowSaved(id: Int): Boolean
+
+    suspend fun isTvShowWatched(id: Int): Boolean
+
+    suspend fun isTvShowUnwatched(id: Int): Boolean
 
     fun getSavedTvShows(): Flow<List<TvShowDetail>>
 }

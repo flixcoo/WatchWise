@@ -1,5 +1,6 @@
 package com.github.nullsafe.watchwise.detail.tvshowdetail.presentation.screen
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -48,8 +49,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.CheckCircleOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -84,9 +93,11 @@ import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
 import com.github.nullsafe.watchwise.core.data.database.entity.ProductionCompany
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShow
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShowType
+import com.github.nullsafe.watchwise.detail.moviedetail.presentation.state.MovieDetailsAction
 import com.github.nullsafe.watchwise.util.extension.getYearFromReleaseDate
 import kotlinx.coroutines.launch
 
+@SuppressLint("StringFormatInvalid")
 @Composable
 fun TvShowDetailsScreen(
     state: TvShowDetailsState,
@@ -110,6 +121,69 @@ fun TvShowDetailsScreen(
                 endButtons = {
                     if (!state.isError && !state.isLoading) {
                         Row {
+                            IconButton(
+                                onClick = {
+                                    onAction(TvShowDetailsAction.ToggleUnwatched)
+
+                                    state.tvShow?.isUnwatched?.let{
+                                        val unwatched = !state.tvShow.isUnwatched
+
+                                        val message = if (unwatched) {
+                                            context.getString(
+                                                R.string.added_to_unwatched,
+                                                state.tvShow.name.orEmpty()
+                                            )
+                                        } else {
+                                            context.getString(
+                                                R.string.removed_from_unwatched,
+                                                state.tvShow.name.orEmpty()
+                                            )
+                                        }
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(message)
+                                        }
+                                    }
+                                }
+                            ) { Icon(
+                                imageVector = if (state.tvShow?.isUnwatched == true)
+                                    Icons.Filled.VisibilityOff
+                                else
+                                    Icons.Outlined.VisibilityOff,
+                                contentDescription = "",
+                                tint = if (state.tvShow?.isUnwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                            )}
+
+                            IconButton(
+                                onClick = {
+                                    onAction(TvShowDetailsAction.ToggleWatched)
+
+                                    state.tvShow?.isWatched?.let{
+                                        val watched = !state.tvShow.isWatched
+
+                                        val message = if (watched) {
+                                            context.getString(
+                                                R.string.added_to_watched,
+                                                state.tvShow.name.orEmpty()
+                                            )
+                                        } else {
+                                            context.getString(
+                                                R.string.removed_from_watched,
+                                                state.tvShow.name.orEmpty()
+                                            )
+                                        }
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(message)
+                                        }
+                                    }
+                                }
+                            ) { Icon(
+                                imageVector = if (state.tvShow?.isWatched == true)
+                                    Icons.Filled.CheckCircle
+                                else
+                                    Icons.Outlined.CheckCircleOutline,
+                                contentDescription = "",
+                                tint = if (state.tvShow?.isWatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                            )}
                             IconButton(
                                 onClick = {
                                     onAction(TvShowDetailsAction.ToggleLike)
@@ -136,9 +210,9 @@ fun TvShowDetailsScreen(
                             ) {
                                 Icon(
                                     imageVector = if (state.tvShow?.liked == true)
-                                        Icons.Filled.Bookmark
+                                        Icons.Filled.Favorite
                                     else
-                                        Icons.Outlined.BookmarkBorder,
+                                        Icons.Outlined.FavoriteBorder,
                                     contentDescription = "",
                                     tint = if (state.tvShow?.liked == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                                 )

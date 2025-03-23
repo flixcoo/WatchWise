@@ -95,19 +95,28 @@
         <item quantity="other">%1$d seasons</item>
     </plurals>
 
-    <string name="added_to_favorites">%1$s added to Watchlist</string>
-    <string name="removed_from_favorites">%1$s removed from Watchlist</string>
+
 
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>
 
-    <string name="to_watch">To Watch</string>
+    <string name="to_watch">Watchlist</string>
     <string name="seen">Seen</string>
     <string name="favourites">Favourites</string>
 
 
     <string name="watchlist_empty_message">No Movies or TV shows added yet. Add them now!</string>
     <string name="watchlist_empty_action">Browse Movies and TV Shows</string>
+
+    <string name="added_to_unwatched">%1$s was added to Watchlist</string>
+    <string name="removed_from_unwatched">%1$s was removed from Watchlist</string>
+
+    <string name="added_to_watched">%1$s was added to Seen</string>
+    <string name="removed_from_watched">%1$s was removed from Seen</string>
+
+
+    <string name="added_to_favorites">%1$s was added to Favorites</string>
+    <string name="removed_from_favorites">%1$s was removed from Favorites</string>
 
     <string name="settings">Settings</string>
 

@@ -22,22 +22,48 @@ interface TvShowDetailDao {
         if (existing == null) {
             save(tvShow.copy(liked = true))
         } else {
-            delete(tvShow)
+            save(existing.copy(liked = !existing.liked))
         }
     }
 
-    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id)")
+    @Transaction
+    suspend fun toggleTvShowWatched(tvShow: TvShowDetail) {
+        val existing = getById(tvShow.id)
+        if (existing == null) {
+            save(tvShow.copy(isWatched = true))
+        } else {
+            save(existing.copy(isWatched = !existing.isWatched))
+        }
+    }
+
+    @Transaction
+    suspend fun toggleTvShowUnwatched(tvShow: TvShowDetail) {
+        val existing = getById(tvShow.id)
+        if (existing == null) {
+            save(tvShow.copy(isUnwatched = true))
+        } else {
+            save(existing.copy(isUnwatched = !existing.isUnwatched))
+        }
+    }
+
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND liked = 1)")
     suspend fun isTvShowSaved(id: Int): Boolean
+
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND isWatched = 1)")
+    suspend fun isTvShowWatched(id: Int): Boolean
+
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND isUnwatched = 1)")
+    suspend fun isTvShowUnwatched(id: Int): Boolean
 
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
     fun getSavedTvShows(): Flow<List<TvShowDetail>>
 
     // Neue Abfragen für die Kategorien
-    @Query("SELECT * FROM TvShowDetail WHERE isWatched = 0 AND liked = 0")
-    fun getTvShowsToWatch(): Flow<List<TvShowDetail>>
+    @Query("SELECT * FROM TvShowDetail WHERE isUnwatched = 1")
+    fun getTvShowsUnwatched(): Flow<List<TvShowDetail>>
 
     @Query("SELECT * FROM TvShowDetail WHERE isWatched = 1")
-    fun getTvShowsSeen(): Flow<List<TvShowDetail>>
+    fun getTvShowsWatched(): Flow<List<TvShowDetail>>
 
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
     fun getTvShowsFavourites(): Flow<List<TvShowDetail>>
@@ -49,4 +75,5 @@ interface TvShowDetailDao {
     // Methode zum Markieren einer Serie als "Favorit"
     @Update
     suspend fun markTvShowAsFavourite(tvShow: TvShowDetail)
+
 }

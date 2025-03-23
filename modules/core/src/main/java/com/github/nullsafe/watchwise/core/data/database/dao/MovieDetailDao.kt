@@ -22,22 +22,48 @@ interface MovieDetailDao {
         if (existing == null) {
             save(movie.copy(liked = true))
         } else {
-            delete(movie)
+            save(existing.copy(liked = !existing.liked))
         }
     }
 
-    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id)")
+    @Transaction
+    suspend fun toggleMovieWatched(movie: MovieDetail) {
+        val existing = getById(movie.id)
+        if (existing == null) {
+            save(movie.copy(isWatched = true))
+        } else {
+            save(existing.copy(isWatched = !existing.isWatched))
+        }
+    }
+
+    @Transaction
+    suspend fun toggleMovieUnwatched(movie: MovieDetail) {
+        val existing = getById(movie.id)
+        if (existing == null) {
+            save(movie.copy(isUnwatched = true))
+        } else {
+            save(existing.copy(isUnwatched = !existing.isUnwatched))
+        }
+    }
+
+    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND liked = 1)")
     suspend fun isMovieSaved(id: Int): Boolean
+
+    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND isWatched = 1)")
+    suspend fun isMovieWatched(id: Int): Boolean
+
+    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND isUnwatched = 1)")
+    suspend fun isMovieUnwatched(id: Int): Boolean
 
     @Query("SELECT * FROM MovieDetail WHERE liked = 1")
     fun getSavedMovies(): Flow<List<MovieDetail>>
 
     // Neue Abfragen für die Kategorien
-    @Query("SELECT * FROM MovieDetail WHERE isWatched = 0 AND liked = 0")
-    fun getMoviesToWatch(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE isUnwatched = 1")
+    fun getMoviesUnwatch(): Flow<List<MovieDetail>>
 
     @Query("SELECT * FROM MovieDetail WHERE isWatched = 1")
-    fun getMoviesSeen(): Flow<List<MovieDetail>>
+    fun getMoviesWatched(): Flow<List<MovieDetail>>
 
     @Query("SELECT * FROM MovieDetail WHERE liked = 1")
     fun getMoviesFavourites(): Flow<List<MovieDetail>>

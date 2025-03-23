@@ -44,8 +44,11 @@ class TvShowDetailsViewModel @AssistedInject constructor(
             val tvShow = (tvShowDetailsResult as? ResultWrapper.Success)?.data
             if (tvShow != null) {
                 val isSaved = tvShowsRepository.isTvShowSaved(tvShow.id)
+                val isWatched = tvShowsRepository.isTvShowWatched(tvShow.id)
+                val isUnwatched = tvShowsRepository.isTvShowUnwatched(tvShow.id)
+
                 state = state.copy(
-                    tvShow = tvShow.copy(liked = isSaved),
+                    tvShow = tvShow.copy(liked = isSaved, isWatched = isWatched, isUnwatched = isUnwatched),
                     isError = false
                 )
             } else {
@@ -150,6 +153,24 @@ class TvShowDetailsViewModel @AssistedInject constructor(
                     state.tvShow?.let { tvShow ->
                         tvShowsRepository.toggleTvShowLike(tvShow)
                         state = state.copy(tvShow = tvShow.copy(liked = !tvShow.liked))
+                    }
+                }
+            }
+
+            is TvShowDetailsAction.ToggleWatched -> {
+                viewModelScope.launch {
+                    state.tvShow?.let { tvShow ->
+                        tvShowsRepository.toggleTvShowWatched(tvShow)
+                        state = state.copy(tvShow = tvShow.copy(isWatched = !tvShow.isWatched))
+                    }
+                }
+            }
+
+            is TvShowDetailsAction.ToggleUnwatched -> {
+                viewModelScope.launch {
+                    state.tvShow?.let { tvShow ->
+                        tvShowsRepository.toggleTvShowUnwatched(tvShow)
+                        state = state.copy(tvShow = tvShow.copy(isUnwatched = !tvShow.isUnwatched))
                     }
                 }
             }

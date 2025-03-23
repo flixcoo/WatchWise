@@ -95,9 +95,6 @@
         <item quantity="other">%1$d Staffeln</item>
     </plurals>
 
-    <string name="added_to_favorites">%1$s zu Favoriten hinzugefügt</string>
-    <string name="removed_from_favorites">%1$s aus Favoriten entfernt</string>
-
     <string name="movies">Filme</string>
     <string name="tv_shows">Serien</string>
 
@@ -107,6 +104,15 @@
 
     <string name="watchlist_empty_message">Noch keine Filme oder Serien hinzugefügt. Füge jetzt welche hinzu!</string>
     <string name="watchlist_empty_action">Filme und Serien durchsuchen</string>
+
+    <string name="added_to_unwatched">%1$s wurde zu \"Noch zu sehen\" hinzugefügt</string>
+    <string name="removed_from_unwatched">%1$s wurde von \"Noch zu sehen\" entfernt</string>
+
+    <string name="added_to_watched">%1$s wurde zu \"Gesehen\" hinzugefügt</string>
+    <string name="removed_from_watched">%1$s wurde von \"Gesehen\" entfernt</string>
+
+    <string name="added_to_favorites">%1$s wurde zu Favoriten hinzugefügt</string>
+    <string name="removed_from_favorites">%1$s wurde aus Favoriten entfernt</string>
 
     <string name="settings">Einstellungen</string>
 </resources>
