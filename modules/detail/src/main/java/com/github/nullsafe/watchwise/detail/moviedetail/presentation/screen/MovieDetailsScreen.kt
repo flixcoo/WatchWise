@@ -1,6 +1,5 @@
 package com.github.nullsafe.watchwise.detail.moviedetail.presentation.screen
 
-import android.R.attr.onClick
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -28,18 +27,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -85,15 +79,15 @@ import com.github.nullsafe.watchwise.compose.components.shimmer.shimmerBackgroun
 import com.github.nullsafe.watchwise.compose.components.topbar.AppCenterAlignedTopAppBar
 import com.github.nullsafe.watchwise.compose.components.video_player.YouTubeThumbnail
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
+import com.github.nullsafe.watchwise.core.R
 import com.github.nullsafe.watchwise.core.common.helper.ImageProvider
+import com.github.nullsafe.watchwise.core.common.helper.SocialMediaProvider
 import com.github.nullsafe.watchwise.core.data.database.entity.CreditsCast
+import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
 import com.github.nullsafe.watchwise.core.data.database.entity.Movie
+import com.github.nullsafe.watchwise.core.data.database.entity.MovieType
 import com.github.nullsafe.watchwise.core.data.database.entity.ProductionCompany
 import com.github.nullsafe.watchwise.core.data.database.entity.Video
-import com.github.nullsafe.watchwise.core.R
-import com.github.nullsafe.watchwise.core.common.helper.SocialMediaProvider
-import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
-import com.github.nullsafe.watchwise.core.data.database.entity.MovieType
 import com.github.nullsafe.watchwise.detail.moviedetail.presentation.state.MovieDetailsAction
 import com.github.nullsafe.watchwise.detail.moviedetail.presentation.state.MovieDetailsState
 import com.github.nullsafe.watchwise.util.extension.convertMinutesToHoursAndMinutes

@@ -32,7 +32,7 @@ interface TvShowDetailDao {
         if (existing == null) {
             save(tvShow.copy(isWatched = true))
         } else {
-            save(existing.copy(isWatched = !existing.isWatched))
+            save(existing.copy(isWatched = !existing.isWatched, isUnwatched = false))
         }
     }
 
@@ -42,7 +42,7 @@ interface TvShowDetailDao {
         if (existing == null) {
             save(tvShow.copy(isUnwatched = true))
         } else {
-            save(existing.copy(isUnwatched = !existing.isUnwatched))
+            save(existing.copy(isUnwatched = !existing.isUnwatched, isWatched = false))
         }
     }
 
