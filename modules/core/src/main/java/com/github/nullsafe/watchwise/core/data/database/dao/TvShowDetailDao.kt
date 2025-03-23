@@ -58,7 +58,6 @@ interface TvShowDetailDao {
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
     fun getSavedTvShows(): Flow<List<TvShowDetail>>
 
-    // Neue Abfragen für die Kategorien
     @Query("SELECT * FROM TvShowDetail WHERE isUnwatched = 1")
     fun getTvShowsUnwatched(): Flow<List<TvShowDetail>>
 
@@ -68,12 +67,5 @@ interface TvShowDetailDao {
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
     fun getTvShowsFavourites(): Flow<List<TvShowDetail>>
 
-    // Methode zum Markieren einer Serie als "gesehen"
-    @Update
-    suspend fun markTvShowAsWatched(tvShow: TvShowDetail)
-
-    // Methode zum Markieren einer Serie als "Favorit"
-    @Update
-    suspend fun markTvShowAsFavourite(tvShow: TvShowDetail)
 
 }

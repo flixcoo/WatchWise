@@ -58,7 +58,6 @@ interface MovieDetailDao {
     @Query("SELECT * FROM MovieDetail WHERE liked = 1")
     fun getSavedMovies(): Flow<List<MovieDetail>>
 
-    // Neue Abfragen für die Kategorien
     @Query("SELECT * FROM MovieDetail WHERE isUnwatched = 1")
     fun getMoviesUnwatch(): Flow<List<MovieDetail>>
 
@@ -68,11 +67,4 @@ interface MovieDetailDao {
     @Query("SELECT * FROM MovieDetail WHERE liked = 1")
     fun getMoviesFavourites(): Flow<List<MovieDetail>>
 
-    // Methode zum Markieren eines Films als "gesehen"
-    @Update
-    suspend fun markMovieAsWatched(movie: MovieDetail)
-
-    // Methode zum Markieren eines Films als "Favorit"
-    @Update
-    suspend fun markMovieAsFavourite(movie: MovieDetail)
 }
