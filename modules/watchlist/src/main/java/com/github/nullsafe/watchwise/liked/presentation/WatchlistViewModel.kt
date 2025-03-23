@@ -55,45 +55,50 @@ class WatchlistViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             Log.d("WatchlistViewModel", "Start loading watchlist items")
-            try{
+            try {
                 withTimeout(5000) {
-            combine(
-                moviesToWatch,
-                moviesSeen,
-                moviesFavourites,
-                tvShowsToWatch,
-                tvShowsSeen,
-                tvShowsFavourites
-            ) { flows ->
-                Log.d("WatchlistViewModel", "Combine block executed")
-                val toWatchMovies = flows[0] as List<MovieDetail>
-                val seenMovies = flows[1] as List<MovieDetail>
-                val favouriteMovies = flows[2] as List<MovieDetail>
-                val toWatchTvShows = flows[3] as List<TvShowDetail>
-                val seenTvShows = flows[4] as List<TvShowDetail>
-                val favouriteTvShows = flows[5] as List<TvShowDetail>
+                    combine(
+                        moviesToWatch,
+                        moviesSeen,
+                        moviesFavourites,
+                        tvShowsToWatch,
+                        tvShowsSeen,
+                        tvShowsFavourites
+                    ) { flows ->
+                        Log.d("WatchlistViewModel", "Combine block executed")
 
-                // Logge die Anzahl der Filme und Serien
-                Log.d("WatchlistViewModel", "Movies to watch: ${toWatchMovies.size}")
-                Log.d("WatchlistViewModel", "Movies seen: ${seenMovies.size}")
-                Log.d("WatchlistViewModel", "Movies favourites: ${favouriteMovies.size}")
-                Log.d("WatchlistViewModel", "TV shows to watch: ${toWatchTvShows.size}")
-                Log.d("WatchlistViewModel", "TV shows seen: ${seenTvShows.size}")
-                Log.d("WatchlistViewModel", "TV shows favourites: ${favouriteTvShows.size}")
+                        val toWatchMovies = flows[0] as List<MovieDetail>
+                        val seenMovies = flows[1] as List<MovieDetail>
+                        val favouriteMovies = flows[2] as List<MovieDetail> // Filme mit liked = true
+                        val toWatchTvShows = flows[3] as List<TvShowDetail>
+                        val seenTvShows = flows[4] as List<TvShowDetail>
+                        val favouriteTvShows = flows[5] as List<TvShowDetail> // Serien mit liked = true
 
-                state = state.copy(
-                    toWatch = toWatchMovies.map { WatchlistItem.Movie(it) } + toWatchTvShows.map { WatchlistItem.TvShow(it) },
-                    seen = seenMovies.map { WatchlistItem.Movie(it) } + seenTvShows.map { WatchlistItem.TvShow(it) },
-                    favourites = favouriteMovies.map { WatchlistItem.Movie(it) } + favouriteTvShows.map { WatchlistItem.TvShow(it) },
-                    isLoading = false // Setze isLoading auf false, nachdem die Daten geladen wurden
-                )
-            }.collectLatest {
-                Log.d("WatchlistViewModel", "Data loaded successfully")}
+                        // Logge die Anzahl der Filme und Serien
+                        Log.d("WatchlistViewModel", "Movies to watch: ${toWatchMovies.size}")
+                        Log.d("WatchlistViewModel", "Movies seen: ${seenMovies.size}")
+                        Log.d("WatchlistViewModel", "Movies favourites: ${favouriteMovies.size}")
+                        Log.d("WatchlistViewModel", "TV shows to watch: ${toWatchTvShows.size}")
+                        Log.d("WatchlistViewModel", "TV shows seen: ${seenTvShows.size}")
+                        Log.d("WatchlistViewModel", "TV shows favourites: ${favouriteTvShows.size}")
 
-        }
-    } catch (e: TimeoutCancellationException) {
+                        // Aktualisiere den Zustand
+                        state = state.copy(
+                            toWatch = toWatchMovies.map { WatchlistItem.Movie(it) } + toWatchTvShows.map { WatchlistItem.TvShow(it) },
+                            seen = seenMovies.map { WatchlistItem.Movie(it) } + seenTvShows.map { WatchlistItem.TvShow(it) },
+                            favourites = favouriteMovies.map { WatchlistItem.Movie(it) } + favouriteTvShows.map { WatchlistItem.TvShow(it) },
+                            isLoading = false // Setze isLoading auf false, nachdem die Daten geladen wurden
+                        )
+                    }.collectLatest {
+                        Log.d("WatchlistViewModel", "Data loaded successfully")
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
                 Log.d("WatchlistViewModel", "Timeout: Combine block did not execute")
-                state = state.copy(isLoading = false) // Shimmer beenden
+                state = state.copy(isLoading = false)
+            } catch (e: Exception) {
+                Log.e("WatchlistViewModel", "Error loading watchlist items", e)
+                state = state.copy(isLoading = false)
             }
         }
     }

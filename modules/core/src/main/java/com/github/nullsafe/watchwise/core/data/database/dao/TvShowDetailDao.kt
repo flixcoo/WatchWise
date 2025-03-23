@@ -39,7 +39,7 @@ interface TvShowDetailDao {
     @Query("SELECT * FROM TvShowDetail WHERE isWatched = 1")
     fun getTvShowsSeen(): Flow<List<TvShowDetail>>
 
-    @Query("SELECT * FROM TvShowDetail WHERE isFavourite = 1")
+    @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
     fun getTvShowsFavourites(): Flow<List<TvShowDetail>>
 
     // Methode zum Markieren einer Serie als "gesehen"

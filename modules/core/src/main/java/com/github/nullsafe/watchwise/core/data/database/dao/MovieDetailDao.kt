@@ -39,7 +39,7 @@ interface MovieDetailDao {
     @Query("SELECT * FROM MovieDetail WHERE isWatched = 1")
     fun getMoviesSeen(): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE isFavourite = 1")
+    @Query("SELECT * FROM MovieDetail WHERE liked = 1")
     fun getMoviesFavourites(): Flow<List<MovieDetail>>
 
     // Methode zum Markieren eines Films als "gesehen"
