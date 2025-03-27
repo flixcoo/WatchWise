@@ -48,6 +48,9 @@ data class TvShowDetail(
     val voteAverage: Double?,
     val voteCount: Int?,
     val liked: Boolean,
+    val isUnwatched: Boolean = false,
+    val isWatched: Boolean = false,
+    val isFavourite: Boolean = false,
     val creditsCasts: List<CreditsCast>,
     val similarTvShows: List<TvShow>,
 )
