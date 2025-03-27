@@ -5,7 +5,7 @@
     <!-- Bottom Navigation Labels -->
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>
-    <string name="nav_watchlist">Watchlist</string>
+    <string name="nav_watchlist">Lists</string>
     <string name="nav_profile">Profile</string>
 
     <!-- Errors -->
@@ -94,7 +94,6 @@
         <item quantity="one">%1$d season</item>
         <item quantity="other">%1$d seasons</item>
     </plurals>
-
 
 
     <string name="movies">Movies</string>
