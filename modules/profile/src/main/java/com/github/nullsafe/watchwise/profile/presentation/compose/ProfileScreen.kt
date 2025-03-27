@@ -16,19 +16,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
+import com.github.nullsafe.watchwise.profile.presentation.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var activeProfile by remember { mutableStateOf<String?>(null) }
+
+    val activeProfile by viewModel.activeProfile
+    val error by viewModel.error
+    val loading by viewModel.loading
 
     Scaffold(
         topBar = {
@@ -64,6 +72,11 @@ fun ProfileScreen() {
                     textAlign = TextAlign.Center
                 )
 
+                if (error != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = error!!, color = Color.Red)
+                }
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 OutlinedTextField(
@@ -84,7 +97,7 @@ fun ProfileScreen() {
                     singleLine = true,
                     leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Profile Icon") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Password,
+                        keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
                     )
                 )
@@ -125,8 +138,8 @@ fun ProfileScreen() {
 
                 Button(
                     onClick = {
-                        if (username.isNotEmpty() && password.isNotEmpty()) {
-                            activeProfile = username
+                        if (username.isNotBlank() && password.isNotBlank()) {
+                            viewModel.register(username, password)
                             username = ""
                             password = ""
                         }
@@ -138,10 +151,43 @@ fun ProfileScreen() {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
                         contentColor = AppTheme.colors.type.inverse
-                    )
+                    ),
+                    enabled = !loading
                 ) {
-                    Text("Create Profile", style = AppTheme.typography.title2)
+                    if (loading) {
+                        CircularProgressIndicator(
+                            color = AppTheme.colors.type.inverse,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    } else {
+                        Text("Create Profile", style = AppTheme.typography.title2)
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = {
+                        if (username.isNotBlank() && password.isNotBlank()) {
+                            viewModel.login(username, password)
+                            username = ""
+                            password = ""
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
+                        contentColor = AppTheme.colors.type.inverse
+                    ),
+                    enabled = !loading
+                ) {
+                    Text("Login", style = AppTheme.typography.title2)
+                }
+
             } else {
                 Card(
                     modifier = Modifier
@@ -176,7 +222,7 @@ fun ProfileScreen() {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = activeProfile!!,
+                            text = activeProfile ?: "Unbekanntes Profil",
                             style = AppTheme.typography.title2,
                             color = AppTheme.colors.type.primary,
                             textAlign = TextAlign.Center
@@ -184,19 +230,9 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(20.dp))
 
                         Button(
-                            onClick = { /* Navigate to profile selection */ },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(24.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF555555)
-                            )
-                        ) {
-                            Text("Change Profile")
-                        }
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Button(
-                            onClick = { activeProfile = null },
+                            onClick = {
+                                activeProfile?.let { viewModel.delete(it) }
+                            },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -205,9 +241,13 @@ fun ProfileScreen() {
                         ) {
                             Text("Delete Profile")
                         }
+
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
         }
     }
 }
+
+
