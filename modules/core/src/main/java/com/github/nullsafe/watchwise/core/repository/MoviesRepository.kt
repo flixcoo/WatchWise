@@ -63,7 +63,15 @@ interface MoviesRepository {
 
     suspend fun toggleMovieLike(movie: MovieDetail)
 
+    suspend fun toggleMovieWatched(movie: MovieDetail)
+
+    suspend fun toggleMovieUnwatched(movie: MovieDetail)
+
     suspend fun isMovieSaved(id: Int): Boolean
+
+    suspend fun isMovieWatched(id: Int): Boolean
+
+    suspend fun isMovieUnwatched(id: Int): Boolean
 
     fun getSavedMovies(): Flow<List<MovieDetail>>
 }
