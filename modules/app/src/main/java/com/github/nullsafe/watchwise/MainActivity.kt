@@ -32,6 +32,7 @@ import com.github.nullsafe.watchwise.navigation.AppNavigation
 import com.github.nullsafe.watchwise.navigation.bottomNavItems
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @Composable
@@ -120,6 +121,14 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(userPreferences) {
                 currentTheme = Themes.entries.find { it.name == userPreferences.theme } ?: Themes.CLASSIC
                 darkTheme = if (userPreferences.isDarkMode) true else null // Null means use system default
+
+                if (userPreferences.language.isBlank()) {
+                    val defaultLanguage = when (Locale.getDefault().language) {
+                        "de" -> "de-DE"
+                        else -> "en-US"
+                    }
+                    userPreferencesManager.updateLanguage(defaultLanguage)
+                }
             }
 
             val currentPalette by remember(currentTheme) { mutableStateOf(currentTheme.getTheme()) }

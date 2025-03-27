@@ -109,7 +109,9 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiKeyInterceptor(): ApiKeyInterceptor = ApiKeyInterceptor()
+    fun provideApiKeyInterceptor(
+        userPreferencesManager: com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
+    ): ApiKeyInterceptor = ApiKeyInterceptor(userPreferencesManager)
 
     @Singleton
     @Provides
