@@ -52,14 +52,13 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                // Füge die neuen Spalten zur Tabelle `MovieDetail` hinzu
                 database.execSQL("ALTER TABLE MovieDetail ADD COLUMN isUnwatched INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE MovieDetail ADD COLUMN isWatched INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE MovieDetail ADD COLUMN isFavourite INTEGER NOT NULL DEFAULT 0")
 
-
-                // Füge die neuen Spalten zur Tabelle `TvShowDetail` hinzu
                 database.execSQL("ALTER TABLE TvShowDetail ADD COLUMN isUnwatched INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE TvShowDetail ADD COLUMN isWatched INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE TvShowDetail ADD COLUMN isFavourite INTEGER NOT NULL DEFAULT 0")
             }
         }
     }
