@@ -16,11 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 import com.github.nullsafe.watchwise.profile.R
 import com.github.nullsafe.watchwise.profile.presentation.ProfileViewModel
@@ -34,7 +34,10 @@ fun ProfileScreen(
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var activeProfile by remember { mutableStateOf<String?>(null) }
+
+    val activeProfile by viewModel.activeProfile
+    val isLoading by viewModel.loading
+    val error by viewModel.error
 
     Scaffold(
         topBar = {
@@ -120,9 +123,9 @@ fun ProfileScreen(
                         imeAction = ImeAction.Done
                     ),
                     trailingIcon = {
-                        val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(imageVector = image, contentDescription = "Toggle Password Visibility")
+                            Icon(icon, contentDescription = "Toggle Password Visibility")
                         }
                     }
                 )
@@ -137,6 +140,7 @@ fun ProfileScreen(
                             password = ""
                         }
                     },
+                    enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
@@ -146,8 +150,25 @@ fun ProfileScreen(
                         contentColor = AppTheme.colors.type.inverse
                     )
                 ) {
-                    Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            color = AppTheme.colors.type.inverse,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
+                    }
                 }
+
+                if (error != null) {
+                    Text(
+                        text = error!!,
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
+                }
+
             } else {
                 Card(
                     modifier = Modifier
@@ -182,7 +203,7 @@ fun ProfileScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = activeProfile!!,
+                            text = activeProfile ?: "–",
                             style = AppTheme.typography.title2,
                             color = AppTheme.colors.type.primary,
                             textAlign = TextAlign.Center
@@ -202,7 +223,7 @@ fun ProfileScreen(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Button(
-                            onClick = { activeProfile = null },
+                            onClick = { viewModel.delete(activeProfile!!) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -217,5 +238,3 @@ fun ProfileScreen(
         }
     }
 }
-
-
