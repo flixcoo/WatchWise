@@ -1,5 +1,6 @@
 package com.github.nullsafe.watchwise.detail.moviedetail.presentation.screen
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -26,10 +27,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -74,21 +79,22 @@ import com.github.nullsafe.watchwise.compose.components.shimmer.shimmerBackgroun
 import com.github.nullsafe.watchwise.compose.components.topbar.AppCenterAlignedTopAppBar
 import com.github.nullsafe.watchwise.compose.components.video_player.YouTubeThumbnail
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
+import com.github.nullsafe.watchwise.core.R
 import com.github.nullsafe.watchwise.core.common.helper.ImageProvider
+import com.github.nullsafe.watchwise.core.common.helper.SocialMediaProvider
 import com.github.nullsafe.watchwise.core.data.database.entity.CreditsCast
+import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
 import com.github.nullsafe.watchwise.core.data.database.entity.Movie
+import com.github.nullsafe.watchwise.core.data.database.entity.MovieType
 import com.github.nullsafe.watchwise.core.data.database.entity.ProductionCompany
 import com.github.nullsafe.watchwise.core.data.database.entity.Video
-import com.github.nullsafe.watchwise.core.R
-import com.github.nullsafe.watchwise.core.common.helper.SocialMediaProvider
-import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
-import com.github.nullsafe.watchwise.core.data.database.entity.MovieType
 import com.github.nullsafe.watchwise.detail.moviedetail.presentation.state.MovieDetailsAction
 import com.github.nullsafe.watchwise.detail.moviedetail.presentation.state.MovieDetailsState
 import com.github.nullsafe.watchwise.util.extension.convertMinutesToHoursAndMinutes
 import com.github.nullsafe.watchwise.util.extension.getYearFromReleaseDate
 import kotlinx.coroutines.launch
 
+@SuppressLint("StringFormatInvalid")
 @Composable
 fun MovieDetailsScreen(
     state: MovieDetailsState,
@@ -114,6 +120,68 @@ fun MovieDetailsScreen(
                         Row {
                             IconButton(
                                 onClick = {
+                                    onAction(MovieDetailsAction.ToggleUnwatched)
+
+                                    state.movie?.isUnwatched?.let{
+                                        val unwatched = !state.movie.isUnwatched
+
+                                        val message = if (unwatched) {
+                                            context.getString(
+                                                R.string.added_to_unwatched,
+                                                state.movie.title.orEmpty()
+                                            )
+                                        } else {
+                                            context.getString(
+                                                R.string.removed_from_unwatched,
+                                                state.movie.title.orEmpty()
+                                            )
+                                        }
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(message)
+                                        }
+                                    }
+                                }
+                            ) { Icon(
+                                imageVector = if (state.movie?.isUnwatched == true)
+                                    Icons.Filled.VisibilityOff
+                                else
+                                    Icons.Outlined.VisibilityOff,
+                                contentDescription = "",
+                                tint = if (state.movie?.isUnwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                            )}
+                            IconButton(
+                                onClick = {
+                                    onAction(MovieDetailsAction.ToggleWatched)
+
+                                    state.movie?.isWatched?.let{
+                                        val watched = !state.movie.isWatched
+
+                                        val message = if (watched) {
+                                            context.getString(
+                                                R.string.added_to_watched,
+                                                state.movie.title.orEmpty()
+                                            )
+                                        } else {
+                                            context.getString(
+                                                R.string.removed_from_watched,
+                                                state.movie.title.orEmpty()
+                                            )
+                                        }
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar(message)
+                                        }
+                                    }
+                                }
+                            ) { Icon(
+                                imageVector = if (state.movie?.isWatched == true)
+                                    Icons.Filled.CheckCircle
+                                else
+                                    Icons.Outlined.CheckCircleOutline,
+                                contentDescription = "",
+                                tint = if (state.movie?.isWatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                            )}
+                            IconButton(
+                                onClick = {
                                     onAction(MovieDetailsAction.ToggleLike)
 
                                     state.movie?.liked?.let {
@@ -121,12 +189,12 @@ fun MovieDetailsScreen(
 
                                         val message = if (liked) {
                                             context.getString(
-                                                R.string.added_to_watchlist,
+                                                R.string.added_to_favorites,
                                                 state.movie.title.orEmpty()
                                             )
                                         } else {
                                             context.getString(
-                                                R.string.removed_from_watchlist,
+                                                R.string.removed_from_favorites,
                                                 state.movie.title.orEmpty()
                                             )
                                         }
@@ -138,9 +206,9 @@ fun MovieDetailsScreen(
                             ) {
                                 Icon(
                                     imageVector = if (state.movie?.liked == true)
-                                        Icons.Filled.Bookmark
+                                        Icons.Filled.Favorite
                                     else
-                                        Icons.Outlined.BookmarkBorder,
+                                        Icons.Outlined.FavoriteBorder,
                                     contentDescription = "",
                                     tint = if (state.movie?.liked == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                                 )

@@ -258,8 +258,24 @@ class TvShowsRepositoryImpl @Inject constructor(
         tvShowDetailDao.toggleTvShowLike(tvShow)
     }
 
+    override suspend fun toggleTvShowWatched(tvShow: TvShowDetail) {
+        tvShowDetailDao.toggleTvShowWatched(tvShow)
+    }
+
+    override suspend fun toggleTvShowUnwatched(tvShow: TvShowDetail) {
+        tvShowDetailDao.toggleTvShowUnwatched(tvShow)
+    }
+
     override suspend fun isTvShowSaved(id: Int): Boolean {
         return tvShowDetailDao.isTvShowSaved(id)
+    }
+
+    override suspend fun isTvShowWatched(id: Int): Boolean {
+        return tvShowDetailDao.isTvShowWatched(id)
+    }
+
+    override suspend fun isTvShowUnwatched(id: Int): Boolean {
+        return tvShowDetailDao.isTvShowUnwatched(id)
     }
 
     override fun getSavedTvShows(): Flow<List<TvShowDetail>> = tvShowDetailDao.getSavedTvShows()

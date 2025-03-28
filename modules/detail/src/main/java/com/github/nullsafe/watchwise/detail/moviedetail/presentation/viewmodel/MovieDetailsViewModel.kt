@@ -16,7 +16,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -43,10 +42,16 @@ class MovieDetailsViewModel @AssistedInject constructor(
             val movieDetailsResult = moviesRepository.getMovieDetails(movieId, null)
 
             val movie = (movieDetailsResult as? ResultWrapper.Success)?.data
-            if(movie != null) {
+            if (movie != null) {
+                val isUnwatched = moviesRepository.isMovieUnwatched(movie.id)
+                val isWatched = moviesRepository.isMovieWatched(movie.id)
                 val isSaved = moviesRepository.isMovieSaved(movie.id)
                 state = state.copy(
-                    movie = movie.copy(liked = isSaved),
+                    movie = movie.copy(
+                        liked = isSaved,
+                        isWatched = isWatched,
+                        isUnwatched = isUnwatched
+                    ),
                     isError = false
                 )
             } else {
@@ -149,6 +154,34 @@ class MovieDetailsViewModel @AssistedInject constructor(
                     state.movie?.let { movie ->
                         moviesRepository.toggleMovieLike(movie)
                         state = state.copy(movie = movie.copy(liked = !movie.liked))
+                    }
+                }
+            }
+
+            is MovieDetailsAction.ToggleWatched -> {
+                viewModelScope.launch {
+                    state.movie?.let { movie ->
+                        moviesRepository.toggleMovieWatched(movie)
+                        state = state.copy(
+                            movie = movie.copy(
+                                isWatched = !movie.isWatched,
+                                isUnwatched = if (movie.isWatched) movie.isUnwatched else false
+                            )
+                        )
+                    }
+                }
+            }
+
+            is MovieDetailsAction.ToggleUnwatched -> {
+                viewModelScope.launch {
+                    state.movie?.let { movie ->
+                        moviesRepository.toggleMovieUnwatched(movie)
+                        state = state.copy(
+                            movie = movie.copy(
+                                isUnwatched = !movie.isUnwatched,
+                                isWatched = if (movie.isUnwatched) movie.isWatched else false
+                            )
+                        )
                     }
                 }
             }

@@ -279,8 +279,24 @@ class MoviesRepositoryImpl @Inject constructor(
         movieDetailDao.toggleMovieLike(movie)
     }
 
+    override suspend fun toggleMovieWatched(movie: MovieDetail) {
+        movieDetailDao.toggleMovieWatched(movie)
+    }
+
+    override suspend fun toggleMovieUnwatched(movie: MovieDetail) {
+        movieDetailDao.toggleMovieUnwatched(movie)
+    }
+
     override suspend fun isMovieSaved(id: Int): Boolean {
         return movieDetailDao.isMovieSaved(id)
+    }
+
+    override suspend fun isMovieUnwatched(id: Int): Boolean {
+        return movieDetailDao.isMovieUnwatched(id)
+    }
+
+    override suspend fun isMovieWatched(id: Int): Boolean {
+        return movieDetailDao.isMovieWatched(id)
     }
 
     override fun getSavedMovies(): Flow<List<MovieDetail>> = movieDetailDao.getSavedMovies()

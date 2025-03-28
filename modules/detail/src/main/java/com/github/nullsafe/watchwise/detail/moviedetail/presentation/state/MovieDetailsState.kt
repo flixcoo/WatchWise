@@ -31,6 +31,8 @@ sealed interface MovieDetailsAction {
     data class OpenVideo(val videoId: String) : MovieDetailsAction
     data class OpenMoviesByType(val movieType: MovieType) : MovieDetailsAction
     data object ToggleLike : MovieDetailsAction
+    data object ToggleWatched : MovieDetailsAction
+    data object ToggleUnwatched : MovieDetailsAction
     data object RetryFetch : MovieDetailsAction
 }
 

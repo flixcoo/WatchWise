@@ -11,6 +11,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +36,8 @@ class UserPreferencesManager @Inject constructor(
             UserPreferences(
                 userName = preferences[PreferencesKeys.USER_NAME].orEmpty(),
                 userId = preferences[PreferencesKeys.USER_ID] ?: 0,
-                language = preferences[PreferencesKeys.LANGUAGE] ?: "en-US",
+                language = preferences[PreferencesKeys.LANGUAGE].takeUnless { it.isNullOrBlank() }
+                    ?: Locale.getDefault().toLanguageTag(),
                 isDarkMode = preferences[PreferencesKeys.IS_DARK_MODE] ?: false,
                 theme = preferences[PreferencesKeys.THEME].orEmpty()
             )
