@@ -16,22 +16,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 import com.github.nullsafe.watchwise.profile.R
+import com.github.nullsafe.watchwise.profile.presentation.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    viewModel: ProfileViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var activeProfile by remember { mutableStateOf<String?>(null) }
+
+    var showPasswordUpdateScreen by remember { mutableStateOf(false) }
+    var newPassword by remember { mutableStateOf("") }
+    var newPasswordVisible by remember { mutableStateOf(false) }
+
+    val activeProfile by viewModel.activeProfile
+    val isLoading by viewModel.loading
+    val error by viewModel.error
 
     Scaffold(
         topBar = {
@@ -117,33 +127,151 @@ fun ProfileScreen() {
                         imeAction = ImeAction.Done
                     ),
                     trailingIcon = {
-                        val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(imageVector = image, contentDescription = "Toggle Password Visibility")
+                            Icon(icon, contentDescription = "Toggle Password Visibility")
                         }
                     }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Button(
-                    onClick = {
-                        if (username.isNotEmpty() && password.isNotEmpty()) {
-                            activeProfile = username
-                            username = ""
-                            password = ""
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                                viewModel.register(username, password)
+                                username = ""
+                                password = ""
+                            }
+                        },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
+                            contentColor = AppTheme.colors.type.inverse
+                        )
+                    ) {
+                        if (isLoading) {
+                            CircularProgressIndicator(
+                                color = AppTheme.colors.type.inverse,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
                         }
-                    },
+                    }
+
+                    Button(
+                        onClick = {
+                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                                viewModel.login(username, password)
+                                username = ""
+                                password = ""
+                            }
+                        },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
+                            contentColor = AppTheme.colors.type.inverse
+                        )
+                    ) {
+                        if (isLoading) {
+                            CircularProgressIndicator(
+                                color = AppTheme.colors.type.inverse,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Text("Login", style = AppTheme.typography.title2)
+                        }
+                    }
+                }
+
+
+                if (error != null) {
+                    Text(
+                        text = error!!,
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
+                }
+
+            } else if (showPasswordUpdateScreen) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
-                        contentColor = AppTheme.colors.type.inverse
-                    )
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
+                    OutlinedTextField(
+                        value = newPassword,
+                        onValueChange = { newPassword = it },
+                        placeholder = { Text("New Password", color = AppTheme.colors.type.secondary) },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = AppTheme.colors.background.card,
+                            unfocusedContainerColor = AppTheme.colors.background.card,
+                            cursorColor = AppTheme.colors.type.primary,
+                            focusedTextColor = AppTheme.colors.type.primary,
+                            unfocusedTextColor = AppTheme.colors.type.primary,
+                            focusedIndicatorColor = AppTheme.colors.type.primary,
+                            unfocusedIndicatorColor = AppTheme.colors.type.secondary
+                        ),
+                        visualTransformation = if (newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val icon = if (newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                            IconButton(onClick = { newPasswordVisible = !newPasswordVisible }) {
+                                Icon(icon, contentDescription = "Toggle Password Visibility")
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+                                viewModel.updatePassword(activeProfile!!, newPassword)
+                                newPassword = ""
+                                showPasswordUpdateScreen = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.theme.tint)
+                        ) {
+                            Text("Confirm")
+                        }
+
+                        Button(
+                            onClick = {
+                                newPassword = ""
+                                showPasswordUpdateScreen = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
                 }
             } else {
                 Card(
@@ -179,7 +307,7 @@ fun ProfileScreen() {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = activeProfile!!,
+                            text = activeProfile ?: "–",
                             style = AppTheme.typography.title2,
                             color = AppTheme.colors.type.primary,
                             textAlign = TextAlign.Center
@@ -187,7 +315,7 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(20.dp))
 
                         Button(
-                            onClick = { /* Navigate to profile selection */ },
+                            onClick = { showPasswordUpdateScreen = true },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -199,7 +327,7 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Button(
-                            onClick = { activeProfile = null },
+                            onClick = { viewModel.delete(activeProfile!!) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -214,3 +342,5 @@ fun ProfileScreen() {
         }
     }
 }
+
+

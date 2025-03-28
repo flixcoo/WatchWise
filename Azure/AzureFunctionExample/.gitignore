@@ -1,0 +1,21 @@
+# ingore dev settings
+local.settings.json
+
+# ignore build artifacts
+bin/
+obj/
+
+# ingore azurite artifacts
+__blobstorage__/
+__queuestorage__/
+__azurite_db_*.json
+
+*.iml
+.gradle
+.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
