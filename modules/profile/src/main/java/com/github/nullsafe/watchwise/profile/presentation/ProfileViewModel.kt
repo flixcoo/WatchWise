@@ -8,12 +8,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.compose.runtime.State
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
 import com.github.nullsafe.watchwise.core.session.UserSessionManager
+import kotlinx.coroutines.flow.collectLatest
 
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userPreferencesManager: UserPreferencesManager
 ) : ViewModel() {
 
     private val _activeProfile = mutableStateOf<String?>(null)
@@ -23,7 +26,14 @@ class ProfileViewModel @Inject constructor(
     val loading = mutableStateOf(false)
 
     init {
-        _activeProfile.value = UserSessionManager.activeProfile
+        viewModelScope.launch {
+            userPreferencesManager.userPreferencesFlow.collectLatest { prefs ->
+                if (prefs.userName.isNotEmpty()) {
+                    _activeProfile.value = prefs.userName
+                    UserSessionManager.activeProfile = prefs.userName
+                }
+            }
+        }
     }
 
     fun register(username: String, password: String) {
@@ -34,6 +44,7 @@ class ProfileViewModel @Inject constructor(
             if (success) {
                 _activeProfile.value = username
                 UserSessionManager.activeProfile = username
+                userPreferencesManager.updateUserName(username)
                 error.value = null
             } else {
                 error.value = "Registration failed"
@@ -49,6 +60,7 @@ class ProfileViewModel @Inject constructor(
             if (success) {
                 _activeProfile.value = username
                 UserSessionManager.activeProfile = username
+                userPreferencesManager.updateUserName(username)
                 error.value = null
             } else {
                 error.value = "Login failed"
@@ -57,9 +69,12 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout() {
-        _activeProfile.value = null
-        UserSessionManager.activeProfile = null
-        error.value = null
+        viewModelScope.launch {
+            _activeProfile.value = null
+            UserSessionManager.activeProfile = null
+            userPreferencesManager.clearUserName()
+            error.value = null
+        }
     }
 
     fun updatePassword(username: String, newPassword: String) {

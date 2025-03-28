@@ -49,9 +49,9 @@ class UserPreferencesManager @Inject constructor(
         }
     }
 
-    suspend fun updateUserId(userId: Int) {
+    suspend fun clearUserName() {
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.USER_ID] = userId
+            preferences.remove(PreferencesKeys.USER_NAME)
         }
     }
 
