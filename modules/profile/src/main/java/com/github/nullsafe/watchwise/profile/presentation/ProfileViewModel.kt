@@ -21,11 +21,16 @@ class ProfileViewModel @Inject constructor(
     val error = mutableStateOf<String?>(null)
     val loading = mutableStateOf(false)
 
+    private val _registrationSuccess = mutableStateOf<Boolean?>(null)
+    val registrationSuccess: State<Boolean?> get() = _registrationSuccess
+
+
     fun register(username: String, password: String) {
         viewModelScope.launch {
             loading.value = true
             val success = userRepository.register(username, password)
             loading.value = false
+            _registrationSuccess.value = success
             if (success) {
                 _activeProfile.value = username
                 error.value = null
@@ -33,6 +38,10 @@ class ProfileViewModel @Inject constructor(
                 error.value = "Registration failed"
             }
         }
+    }
+
+    fun resetRegistrationStatus() {
+        _registrationSuccess.value = null
     }
 
     fun login(username: String, password: String) {

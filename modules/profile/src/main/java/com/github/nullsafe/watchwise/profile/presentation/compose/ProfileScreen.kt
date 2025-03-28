@@ -39,6 +39,10 @@ fun ProfileScreen(
     var newPassword by remember { mutableStateOf("") }
     var newPasswordVisible by remember { mutableStateOf(false) }
 
+    val registrationSuccess = viewModel.registrationSuccess.value
+    var usernameError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+
     val activeProfile by viewModel.activeProfile
     val isLoading by viewModel.loading
     val error by viewModel.error
@@ -102,6 +106,15 @@ fun ProfileScreen(
                     )
                 )
 
+                if (usernameError != null) {
+                    Text(
+                        text = usernameError!!,
+                        color = Color.Red,
+                        style = AppTheme.typography.body,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
@@ -134,6 +147,15 @@ fun ProfileScreen(
                     }
                 )
 
+                if (passwordError != null) {
+                    Text(
+                        text = passwordError!!,
+                        color = Color.Red,
+                        style = AppTheme.typography.body,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Column(
@@ -142,7 +164,22 @@ fun ProfileScreen(
                 ) {
                     Button(
                         onClick = {
-                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                            usernameError = null
+                            passwordError = null
+
+                            if (username.isEmpty()) {
+                                usernameError = "Username must not be empty"
+                            } else if (username.length < 5) {
+                                usernameError = "Username must at least be 5 chars long"
+                            }
+
+                            if (password.isEmpty()) {
+                                passwordError = "Password must not be empty"
+                            } else if (password.length < 6) {
+                                passwordError = "Password must at least be 5 chars long"
+                            }
+
+                            if (usernameError == null && passwordError == null) {
                                 viewModel.register(username, password)
                                 username = ""
                                 password = ""
@@ -199,6 +236,17 @@ fun ProfileScreen(
                     }
                 }
 
+                registrationSuccess?.let { success ->
+                    val message = if (success) "registered successfully" else "registration failed"
+                    val color = if (success) Color(0xFF4CAF50) else Color.Red
+
+                    Text(
+                        text = message,
+                        color = color,
+                        style = AppTheme.typography.body,
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
+                }
 
                 if (error != null) {
                     Text(
