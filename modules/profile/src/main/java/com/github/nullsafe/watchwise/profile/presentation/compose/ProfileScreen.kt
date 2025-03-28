@@ -20,11 +20,14 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
+import com.github.nullsafe.watchwise.profile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
+    val context = LocalContext.current;
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -35,7 +38,7 @@ fun ProfileScreen() {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Profile",
+                        text = context.getString(R.string.nav_profile),
                         style = AppTheme.typography.title3,
                         color = AppTheme.colors.type.secondary
                     )
