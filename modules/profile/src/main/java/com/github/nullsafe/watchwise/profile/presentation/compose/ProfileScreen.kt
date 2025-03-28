@@ -27,7 +27,9 @@ import com.github.nullsafe.watchwise.profile.presentation.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel = androidx.hilt.navigation.compose.hiltViewModel()) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
