@@ -51,18 +51,21 @@ class ProfileViewModel @Inject constructor(
 
     fun updatePassword(username: String, newPassword: String) {
         viewModelScope.launch {
+            loading.value = true
             val success = userRepository.update(username, newPassword)
-            if (!success) {
-                error.value = "Password update failed"
-            }
+            loading.value = false
+            error.value = if (success) null else "Password update failed"
         }
     }
 
     fun delete(username: String) {
         viewModelScope.launch {
+            loading.value = true
             val success = userRepository.delete(username)
+            loading.value = false
             if (success) {
                 _activeProfile.value = null
+                error.value = null
             } else {
                 error.value = "Delete failed"
             }
