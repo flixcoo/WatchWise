@@ -1,5 +1,9 @@
-[![API](https://img.shields.io/badge/API-23%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=23)
-[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+![Version](https://img.shields.io/badge/Version-0.0.5-orange)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-7F52FF?logo=kotlin)
+![Android](https://img.shields.io/badge/Android-15.0-3DDC84?logo=android)
+![Azure Functions](https://img.shields.io/badge/Azure_Functions-v4-white?logo=azure-functions)
+![Powered by TMDB](https://img.shields.io/badge/Powered_by_TMDB-555555?logo=themoviedatabase&logoColor=01D277)
+
 
 # WatchWise
 
