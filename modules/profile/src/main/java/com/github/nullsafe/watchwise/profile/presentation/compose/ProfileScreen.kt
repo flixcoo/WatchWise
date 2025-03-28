@@ -147,6 +147,14 @@ fun ProfileScreen(
                     }
                 )
 
+                Column(modifier = Modifier.padding(top = 8.dp)) {
+                    RuleCheck("Mindestens 8 Zeichen", hasMinLength(password))
+                    RuleCheck("Mindestens 1 Großbuchstabe", hasUpperCase(password))
+                    RuleCheck("Mindestens 1 Kleinbuchstabe", hasLowerCase(password))
+                    RuleCheck("Mindestens 1 Zahl", hasDigit(password))
+                    RuleCheck("Mindestens 1 Sonderzeichen", hasSpecialChar(password))
+                }
+
                 if (passwordError != null) {
                     Text(
                         text = passwordError!!,
@@ -175,8 +183,14 @@ fun ProfileScreen(
 
                             if (password.isEmpty()) {
                                 passwordError = "Password must not be empty"
-                            } else if (password.length < 6) {
-                                passwordError = "Password must at least be 5 chars long"
+                            } else if (!(
+                                        hasMinLength(password) &&
+                                                hasUpperCase(password) &&
+                                                hasLowerCase(password) &&
+                                                hasDigit(password) &&
+                                                hasSpecialChar(password)
+                                        )) {
+                                passwordError = "Passwort erfüllt nicht alle Kriterien"
                             }
 
                             if (usernameError == null && passwordError == null) {
@@ -390,5 +404,12 @@ fun ProfileScreen(
         }
     }
 }
+
+fun hasMinLength(pw: String) = pw.length >= 8
+fun hasUpperCase(pw: String) = pw.any { it.isUpperCase() }
+fun hasLowerCase(pw: String) = pw.any { it.isLowerCase() }
+fun hasDigit(pw: String) = pw.any { it.isDigit() }
+fun hasSpecialChar(pw: String) = pw.any { "!@#\$%^&*()_+-=[]{}|;:'\",.<>?/".contains(it) }
+
 
 

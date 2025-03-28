@@ -40,10 +40,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun resetRegistrationStatus() {
-        _registrationSuccess.value = null
-    }
-
     fun login(username: String, password: String) {
         viewModelScope.launch {
             loading.value = true
@@ -80,4 +76,6 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+
 }
