@@ -23,7 +23,7 @@ interface UserApi {
         @Query("code") key: String
     ): Response<Unit>
 
-    @PUT("user/update")
+    @PUT("user/updatePassword")
     suspend fun updateUser(
         @Body user: UserRequest,
         @Query("code") key: String

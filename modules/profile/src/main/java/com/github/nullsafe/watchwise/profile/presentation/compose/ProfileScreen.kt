@@ -35,6 +35,10 @@ fun ProfileScreen(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    var showPasswordUpdateScreen by remember { mutableStateOf(false) }
+    var newPassword by remember { mutableStateOf("") }
+    var newPasswordVisible by remember { mutableStateOf(false) }
+
     val activeProfile by viewModel.activeProfile
     val isLoading by viewModel.loading
     val error by viewModel.error
@@ -204,6 +208,71 @@ fun ProfileScreen(
                     )
                 }
 
+            } else if (showPasswordUpdateScreen) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    OutlinedTextField(
+                        value = newPassword,
+                        onValueChange = { newPassword = it },
+                        placeholder = { Text("New Password", color = AppTheme.colors.type.secondary) },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = AppTheme.colors.background.card,
+                            unfocusedContainerColor = AppTheme.colors.background.card,
+                            cursorColor = AppTheme.colors.type.primary,
+                            focusedTextColor = AppTheme.colors.type.primary,
+                            unfocusedTextColor = AppTheme.colors.type.primary,
+                            focusedIndicatorColor = AppTheme.colors.type.primary,
+                            unfocusedIndicatorColor = AppTheme.colors.type.secondary
+                        ),
+                        visualTransformation = if (newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val icon = if (newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                            IconButton(onClick = { newPasswordVisible = !newPasswordVisible }) {
+                                Icon(icon, contentDescription = "Toggle Password Visibility")
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+                                viewModel.updatePassword(activeProfile!!, newPassword)
+                                newPassword = ""
+                                showPasswordUpdateScreen = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.theme.tint)
+                        ) {
+                            Text("Confirm")
+                        }
+
+                        Button(
+                            onClick = {
+                                newPassword = ""
+                                showPasswordUpdateScreen = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                }
             } else {
                 Card(
                     modifier = Modifier
@@ -246,7 +315,7 @@ fun ProfileScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         Button(
-                            onClick = { /* Navigate to profile selection */ },
+                            onClick = { showPasswordUpdateScreen = true },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -273,3 +342,5 @@ fun ProfileScreen(
         }
     }
 }
+
+
