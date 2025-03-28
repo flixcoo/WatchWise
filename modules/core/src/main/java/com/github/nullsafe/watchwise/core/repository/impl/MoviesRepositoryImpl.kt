@@ -22,6 +22,7 @@ import com.github.nullsafe.watchwise.core.data.mapper.VideoMapper
 import com.github.nullsafe.watchwise.core.pager.movies.MoviesPagingSource
 import com.github.nullsafe.watchwise.core.pager.movies.SimilarOrRecommendedMoviesPagingSource
 import com.github.nullsafe.watchwise.core.repository.MoviesRepository
+import com.github.nullsafe.watchwise.core.session.UserSessionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
@@ -147,7 +148,9 @@ class MoviesRepositoryImpl @Inject constructor(
     ): ResultWrapper<MovieDetail> {
         return try {
             val movieDetailDto = moviesApi.getMovieDetails(movieId, language)
-            val movieDetail = movieDetailMapper.map(movieDetailDto)
+            val username = UserSessionManager.activeProfile ?: ""
+            val movieDetail = movieDetailMapper.map(movieDetailDto, username)
+
             ResultWrapper.Success(movieDetail)
         } catch (e: HttpException) {
             ResultWrapper.Error(
@@ -299,5 +302,6 @@ class MoviesRepositoryImpl @Inject constructor(
         return movieDetailDao.isMovieWatched(id)
     }
 
-    override fun getSavedMovies(): Flow<List<MovieDetail>> = movieDetailDao.getSavedMovies()
+    override fun getSavedMovies(username: String): Flow<List<MovieDetail>> =
+        movieDetailDao.getSavedMovies(username)
 }

@@ -10,6 +10,7 @@ import com.github.nullsafe.watchwise.core.data.database.dao.MovieDetailDao
 import com.github.nullsafe.watchwise.core.data.database.dao.TvShowDetailDao
 import com.github.nullsafe.watchwise.core.data.database.entity.MovieDetail
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShowDetail
+import com.github.nullsafe.watchwise.core.session.UserSessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.Channel
@@ -34,22 +35,24 @@ class WatchlistViewModel @Inject constructor(
     private val _effect = Channel<WatchlistEffect>()
     val effect = _effect.receiveAsFlow()
 
-    private val moviesToWatch = movieDao.getMoviesUnwatch()
+    private val username = UserSessionManager.activeProfile ?: ""
+
+    private val moviesToWatch = movieDao.getMoviesUnwatch(username)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val moviesSeen = movieDao.getMoviesWatched()
+    private val moviesSeen = movieDao.getMoviesWatched(username)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val moviesFavourites = movieDao.getMoviesFavourites()
+    private val moviesFavourites = movieDao.getMoviesFavourites(username)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val tvShowsToWatch = tvShowDao.getTvShowsUnwatched()
+    private val tvShowsToWatch = tvShowDao.getTvShowsUnwatched(username)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val tvShowsSeen = tvShowDao.getTvShowsWatched()
+    private val tvShowsSeen = tvShowDao.getTvShowsWatched(username)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val tvShowsFavourites = tvShowDao.getTvShowsFavourites()
+    private val tvShowsFavourites = tvShowDao.getTvShowsFavourites(username)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     init {
@@ -69,12 +72,11 @@ class WatchlistViewModel @Inject constructor(
 
                         val toWatchMovies = flows[0] as List<MovieDetail>
                         val seenMovies = flows[1] as List<MovieDetail>
-                        val favouriteMovies = flows[2] as List<MovieDetail> // Filme mit liked = true
+                        val favouriteMovies = flows[2] as List<MovieDetail>
                         val toWatchTvShows = flows[3] as List<TvShowDetail>
                         val seenTvShows = flows[4] as List<TvShowDetail>
-                        val favouriteTvShows = flows[5] as List<TvShowDetail> // Serien mit liked = true
+                        val favouriteTvShows = flows[5] as List<TvShowDetail>
 
-                        // Logge die Anzahl der Filme und Serien
                         Log.d("WatchlistViewModel", "Movies to watch: ${toWatchMovies.size}")
                         Log.d("WatchlistViewModel", "Movies seen: ${seenMovies.size}")
                         Log.d("WatchlistViewModel", "Movies favourites: ${favouriteMovies.size}")
@@ -82,12 +84,11 @@ class WatchlistViewModel @Inject constructor(
                         Log.d("WatchlistViewModel", "TV shows seen: ${seenTvShows.size}")
                         Log.d("WatchlistViewModel", "TV shows favourites: ${favouriteTvShows.size}")
 
-                        // Aktualisiere den Zustand
                         state = state.copy(
                             toWatch = toWatchMovies.map { WatchlistItem.Movie(it) } + toWatchTvShows.map { WatchlistItem.TvShow(it) },
                             seen = seenMovies.map { WatchlistItem.Movie(it) } + seenTvShows.map { WatchlistItem.TvShow(it) },
                             favourites = favouriteMovies.map { WatchlistItem.Movie(it) } + favouriteTvShows.map { WatchlistItem.TvShow(it) },
-                            isLoading = false // Setze isLoading auf false, nachdem die Daten geladen wurden
+                            isLoading = false
                         )
                     }.collectLatest {
                         Log.d("WatchlistViewModel", "Data loaded successfully")

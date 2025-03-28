@@ -27,6 +27,7 @@ import com.github.nullsafe.watchwise.core.data.mapper.TvShowDetailMapper
 import com.github.nullsafe.watchwise.core.data.mapper.VideoMapper
 import com.github.nullsafe.watchwise.core.pager.tv_shows.SimilarOrRecommendedTvShowsPagingSource
 import com.github.nullsafe.watchwise.core.pager.tv_shows.TvShowsPagingSource
+import com.github.nullsafe.watchwise.core.session.UserSessionManager
 import kotlinx.coroutines.flow.catch
 import retrofit2.HttpException
 import java.io.IOException
@@ -127,7 +128,8 @@ class TvShowsRepositoryImpl @Inject constructor(
     ): ResultWrapper<TvShowDetail> {
         return try {
             val tvShowDetailDto = tvShowsApi.getTvShowDetail(tvShowId, language)
-            val tvShowDetail = tvShowDetailMapper.map(tvShowDetailDto)
+            val username = UserSessionManager.activeProfile ?: ""
+            val tvShowDetail = tvShowDetailMapper.map(tvShowDetailDto, username)
             ResultWrapper.Success(tvShowDetail)
         } catch (e: Exception) {
             handleError(e)
@@ -278,5 +280,6 @@ class TvShowsRepositoryImpl @Inject constructor(
         return tvShowDetailDao.isTvShowUnwatched(id)
     }
 
-    override fun getSavedTvShows(): Flow<List<TvShowDetail>> = tvShowDetailDao.getSavedTvShows()
+    override fun getSavedTvShows(username: String): Flow<List<TvShowDetail>> =
+        tvShowDetailDao.getSavedTvShows(username)
 }

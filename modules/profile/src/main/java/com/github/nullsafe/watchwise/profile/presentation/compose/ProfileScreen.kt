@@ -336,6 +336,19 @@ fun ProfileScreen(
                         ) {
                             Text(context.getString(R.string.delete_profile))
                         }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Button(
+                            onClick = { viewModel.logout() },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f)
+                            )
+                        ) {
+                            Text("Logout")
+                        }
                     }
                 }
             }

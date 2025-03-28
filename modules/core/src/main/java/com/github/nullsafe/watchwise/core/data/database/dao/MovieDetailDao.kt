@@ -55,16 +55,15 @@ interface MovieDetailDao {
     @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND isUnwatched = 1)")
     suspend fun isMovieUnwatched(id: Int): Boolean
 
-    @Query("SELECT * FROM MovieDetail WHERE liked = 1")
-    fun getSavedMovies(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE liked = 1 AND username = :username")
+    fun getSavedMovies(username: String): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE isUnwatched = 1")
-    fun getMoviesUnwatch(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE isUnwatched = 1 AND username = :username")
+    fun getMoviesUnwatch(username: String): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE isWatched = 1")
-    fun getMoviesWatched(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE isWatched = 1 AND username = :username")
+    fun getMoviesWatched(username: String): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE liked = 1")
-    fun getMoviesFavourites(): Flow<List<MovieDetail>>
-
+    @Query("SELECT * FROM MovieDetail WHERE liked = 1 AND username = :username")
+    fun getMoviesFavourites(username: String): Flow<List<MovieDetail>>
 }

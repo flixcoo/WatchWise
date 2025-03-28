@@ -78,5 +78,5 @@ interface TvShowsRepository {
 
     suspend fun isTvShowUnwatched(id: Int): Boolean
 
-    fun getSavedTvShows(): Flow<List<TvShowDetail>>
+    fun getSavedTvShows(username: String): Flow<List<TvShowDetail>>
 }

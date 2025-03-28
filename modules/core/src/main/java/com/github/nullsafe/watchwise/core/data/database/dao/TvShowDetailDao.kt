@@ -55,17 +55,15 @@ interface TvShowDetailDao {
     @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND isUnwatched = 1)")
     suspend fun isTvShowUnwatched(id: Int): Boolean
 
-    @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
-    fun getSavedTvShows(): Flow<List<TvShowDetail>>
+    @Query("SELECT * FROM TvShowDetail WHERE liked = 1 AND username = :username")
+    fun getSavedTvShows(username: String): Flow<List<TvShowDetail>>
 
-    @Query("SELECT * FROM TvShowDetail WHERE isUnwatched = 1")
-    fun getTvShowsUnwatched(): Flow<List<TvShowDetail>>
+    @Query("SELECT * FROM TvShowDetail WHERE isUnwatched = 1 AND username = :username")
+    fun getTvShowsUnwatched(username: String): Flow<List<TvShowDetail>>
 
-    @Query("SELECT * FROM TvShowDetail WHERE isWatched = 1")
-    fun getTvShowsWatched(): Flow<List<TvShowDetail>>
+    @Query("SELECT * FROM TvShowDetail WHERE isWatched = 1 AND username = :username")
+    fun getTvShowsWatched(username: String): Flow<List<TvShowDetail>>
 
-    @Query("SELECT * FROM TvShowDetail WHERE liked = 1")
-    fun getTvShowsFavourites(): Flow<List<TvShowDetail>>
-
-
+    @Query("SELECT * FROM TvShowDetail WHERE liked = 1 AND username = :username")
+    fun getTvShowsFavourites(username: String): Flow<List<TvShowDetail>>
 }

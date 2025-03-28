@@ -33,5 +33,6 @@ data class MovieDetail(
     val isWatched: Boolean = false,
     val isFavourite: Boolean = false,
     val creditsCasts: List<CreditsCast>,
-    val similarMovies: List<Movie>
+    val similarMovies: List<Movie>,
+    val username: String
 )

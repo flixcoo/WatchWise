@@ -73,5 +73,5 @@ interface MoviesRepository {
 
     suspend fun isMovieUnwatched(id: Int): Boolean
 
-    fun getSavedMovies(): Flow<List<MovieDetail>>
+    fun getSavedMovies(username: String): Flow<List<MovieDetail>>
 }

@@ -53,6 +53,7 @@ data class TvShowDetail(
     val isFavourite: Boolean = false,
     val creditsCasts: List<CreditsCast>,
     val similarTvShows: List<TvShow>,
+    val username: String
 )
 
 data class LastEpisodeToAir(
