@@ -121,5 +121,8 @@
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
     <string name="create_profile">Profil erstellen</string>
+    <string name="active_profile">Aktives Profil</string>
+    <string name="change_profile">Profil ändern</string>
+    <string name="delete_profile">Profil löschen</string>
 
 </resources>

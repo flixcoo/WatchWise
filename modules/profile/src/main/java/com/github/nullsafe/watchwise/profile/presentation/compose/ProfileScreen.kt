@@ -172,7 +172,7 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = "Active Profile",
+                            text = context.getString(R.string.active_profile),
                             style = AppTheme.typography.body,
                             color = AppTheme.colors.type.secondary,
                             textAlign = TextAlign.Center
@@ -194,7 +194,7 @@ fun ProfileScreen() {
                                 containerColor = Color(0xFF555555)
                             )
                         ) {
-                            Text("Change Profile")
+                            Text(context.getString(R.string.change_profile))
                         }
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -206,7 +206,7 @@ fun ProfileScreen() {
                                 containerColor = AppTheme.colors.type.alert.copy(alpha = 0.7f)
                             )
                         ) {
-                            Text("Delete Profile")
+                            Text(context.getString(R.string.delete_profile))
                         }
                     }
                 }
