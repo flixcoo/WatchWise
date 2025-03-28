@@ -20,11 +20,14 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
+import com.github.nullsafe.watchwise.profile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
+    val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -35,7 +38,7 @@ fun ProfileScreen() {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Profile",
+                        text = context.getString(R.string.nav_profile),
                         style = AppTheme.typography.title3,
                         color = AppTheme.colors.type.secondary
                     )
@@ -58,7 +61,7 @@ fun ProfileScreen() {
         ) {
             if (activeProfile == null) {
                 Text(
-                    text = "No active profile available",
+                    text = context.getString(R.string.no_profile),
                     style = AppTheme.typography.title2,
                     color = AppTheme.colors.type.secondary,
                     textAlign = TextAlign.Center
@@ -69,7 +72,7 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    placeholder = { Text("Username", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text(context.getString(R.string.username), color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -94,7 +97,7 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("Password", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text(context.getString(R.string.password), color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -140,7 +143,7 @@ fun ProfileScreen() {
                         contentColor = AppTheme.colors.type.inverse
                     )
                 ) {
-                    Text("Create Profile", style = AppTheme.typography.title2)
+                    Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
                 }
             } else {
                 Card(
@@ -169,7 +172,7 @@ fun ProfileScreen() {
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = "Active Profile",
+                            text = context.getString(R.string.active_profile),
                             style = AppTheme.typography.body,
                             color = AppTheme.colors.type.secondary,
                             textAlign = TextAlign.Center
@@ -191,7 +194,7 @@ fun ProfileScreen() {
                                 containerColor = Color(0xFF555555)
                             )
                         ) {
-                            Text("Change Profile")
+                            Text(context.getString(R.string.change_profile))
                         }
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -203,7 +206,7 @@ fun ProfileScreen() {
                                 containerColor = AppTheme.colors.type.alert.copy(alpha = 0.7f)
                             )
                         ) {
-                            Text("Delete Profile")
+                            Text(context.getString(R.string.delete_profile))
                         }
                     }
                 }
