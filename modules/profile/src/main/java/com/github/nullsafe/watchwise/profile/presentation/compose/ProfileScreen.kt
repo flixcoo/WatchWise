@@ -16,34 +16,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
-import com.github.nullsafe.watchwise.profile.presentation.ProfileViewModel
+import com.github.nullsafe.watchwise.profile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel()
-) {
+fun ProfileScreen() {
+    val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-
-    val activeProfile by viewModel.activeProfile
-    val error by viewModel.error
-    val loading by viewModel.loading
+    var activeProfile by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Profile",
+                        text = context.getString(R.string.nav_profile),
                         style = AppTheme.typography.title3,
                         color = AppTheme.colors.type.secondary
                     )
@@ -66,23 +61,18 @@ fun ProfileScreen(
         ) {
             if (activeProfile == null) {
                 Text(
-                    text = "No active profile available",
+                    text = context.getString(R.string.no_profile),
                     style = AppTheme.typography.title2,
                     color = AppTheme.colors.type.secondary,
                     textAlign = TextAlign.Center
                 )
-
-                if (error != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = error!!, color = Color.Red)
-                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    placeholder = { Text("Username", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text(context.getString(R.string.username), color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -97,7 +87,7 @@ fun ProfileScreen(
                     singleLine = true,
                     leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Profile Icon") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Text,
+                        keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Next
                     )
                 )
@@ -107,7 +97,7 @@ fun ProfileScreen(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("Password", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text(context.getString(R.string.password), color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -138,8 +128,8 @@ fun ProfileScreen(
 
                 Button(
                     onClick = {
-                        if (username.isNotBlank() && password.isNotBlank()) {
-                            viewModel.register(username, password)
+                        if (username.isNotEmpty() && password.isNotEmpty()) {
+                            activeProfile = username
                             username = ""
                             password = ""
                         }
@@ -151,43 +141,10 @@ fun ProfileScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
                         contentColor = AppTheme.colors.type.inverse
-                    ),
-                    enabled = !loading
+                    )
                 ) {
-                    if (loading) {
-                        CircularProgressIndicator(
-                            color = AppTheme.colors.type.inverse,
-                            strokeWidth = 2.dp,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    } else {
-                        Text("Create Profile", style = AppTheme.typography.title2)
-                    }
+                    Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
                 }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Button(
-                    onClick = {
-                        if (username.isNotBlank() && password.isNotBlank()) {
-                            viewModel.login(username, password)
-                            username = ""
-                            password = ""
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
-                        contentColor = AppTheme.colors.type.inverse
-                    ),
-                    enabled = !loading
-                ) {
-                    Text("Login", style = AppTheme.typography.title2)
-                }
-
             } else {
                 Card(
                     modifier = Modifier
@@ -215,14 +172,14 @@ fun ProfileScreen(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = "Active Profile",
+                            text = context.getString(R.string.active_profile),
                             style = AppTheme.typography.body,
                             color = AppTheme.colors.type.secondary,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = activeProfile ?: "Unbekanntes Profil",
+                            text = activeProfile!!,
                             style = AppTheme.typography.title2,
                             color = AppTheme.colors.type.primary,
                             textAlign = TextAlign.Center
@@ -230,19 +187,27 @@ fun ProfileScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         Button(
-                            onClick = {
-                                activeProfile?.let { viewModel.delete(it) }
-                            },
+                            onClick = { /* Navigate to profile selection */ },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF555555)
+                            )
+                        ) {
+                            Text(context.getString(R.string.change_profile))
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Button(
+                            onClick = { activeProfile = null },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(24.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = AppTheme.colors.type.alert.copy(alpha = 0.7f)
                             )
                         ) {
-                            Text("Delete Profile")
+                            Text(context.getString(R.string.delete_profile))
                         }
-
-                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
