@@ -115,4 +115,11 @@
     <string name="removed_from_favorites">%1$s wurde aus Favoriten entfernt</string>
 
     <string name="settings">Einstellungen</string>
+
+    <!-- Profile screen -->
+    <string name="no_profile">Kein aktives Profil verfügbar</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="create_profile">Profil erstellen</string>
+
 </resources>

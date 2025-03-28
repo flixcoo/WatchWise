@@ -27,7 +27,7 @@ import com.github.nullsafe.watchwise.profile.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
-    val context = LocalContext.current;
+    val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -61,7 +61,7 @@ fun ProfileScreen() {
         ) {
             if (activeProfile == null) {
                 Text(
-                    text = "No active profile available",
+                    text = context.getString(R.string.no_profile),
                     style = AppTheme.typography.title2,
                     color = AppTheme.colors.type.secondary,
                     textAlign = TextAlign.Center
@@ -72,7 +72,7 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    placeholder = { Text("Username", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text(context.getString(R.string.username), color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -97,7 +97,7 @@ fun ProfileScreen() {
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("Password", color = AppTheme.colors.type.secondary) },
+                    placeholder = { Text(context.getString(R.string.password), color = AppTheme.colors.type.secondary) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -143,7 +143,7 @@ fun ProfileScreen() {
                         contentColor = AppTheme.colors.type.inverse
                     )
                 ) {
-                    Text("Create Profile", style = AppTheme.typography.title2)
+                    Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
                 }
             } else {
                 Card(
