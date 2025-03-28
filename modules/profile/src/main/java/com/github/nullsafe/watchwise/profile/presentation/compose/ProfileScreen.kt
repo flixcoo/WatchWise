@@ -132,34 +132,69 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Button(
-                    onClick = {
-                        if (username.isNotEmpty() && password.isNotEmpty()) {
-                            viewModel.register(username, password)
-                            username = ""
-                            password = ""
-                        }
-                    },
-                    enabled = !isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
-                        contentColor = AppTheme.colors.type.inverse
-                    )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            color = AppTheme.colors.type.inverse,
-                            strokeWidth = 2.dp,
-                            modifier = Modifier.size(24.dp)
+                    Button(
+                        onClick = {
+                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                                viewModel.register(username, password)
+                                username = ""
+                                password = ""
+                            }
+                        },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
+                            contentColor = AppTheme.colors.type.inverse
                         )
-                    } else {
-                        Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
+                    ) {
+                        if (isLoading) {
+                            CircularProgressIndicator(
+                                color = AppTheme.colors.type.inverse,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
+                        }
+                    }
+
+                    Button(
+                        onClick = {
+                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                                viewModel.login(username, password)
+                                username = ""
+                                password = ""
+                            }
+                        },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
+                            contentColor = AppTheme.colors.type.inverse
+                        )
+                    ) {
+                        if (isLoading) {
+                            CircularProgressIndicator(
+                                color = AppTheme.colors.type.inverse,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Text("Login", style = AppTheme.typography.title2)
+                        }
                     }
                 }
+
 
                 if (error != null) {
                     Text(
