@@ -3,7 +3,6 @@ package com.github.nullsafe.watchwise.core.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 private const val LAST_EPISODE_TO_AIR_ID = "last_episode_to_air_id"
 private const val LAST_EPISODE_TO_AIR_DATE = "last_episode_to_air_date"
@@ -16,9 +15,9 @@ private const val LAST_EPISODE_TO_AIR_SEASON_STILL_PATH = "last_episode_to_air_s
 private const val LAST_EPISODE_TO_AIR_VOTE_AVERAGE = "last_episode_to_air_vote_average"
 private const val LAST_EPISODE_TO_AIR_VOTE_COUNT = "last_episode_to_air_vote_count"
 
-@Entity
+@Entity(primaryKeys = ["id", "username"])
 data class TvShowDetail(
-    @PrimaryKey val id: Int,
+    val id: Int,
     @Embedded val lastEpisodeToAir: LastEpisodeToAir?,
     val backdropPath: String?,
     val createdBy: List<CreatedBy>?,

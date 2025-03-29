@@ -273,35 +273,43 @@ class MoviesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveMovie(movie: MovieDetail) {
-        movieDetailDao.save(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.save(movie.copy(username = username))
     }
 
     override suspend fun removeMovie(movie: MovieDetail) {
-        movieDetailDao.delete(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.delete(movie.copy(username = username))
     }
 
     override suspend fun toggleMovieLike(movie: MovieDetail) {
-        movieDetailDao.toggleMovieLike(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.toggleMovieLike(movie.copy(username = username))
     }
 
     override suspend fun toggleMovieWatched(movie: MovieDetail) {
-        movieDetailDao.toggleMovieWatched(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.toggleMovieWatched(movie.copy(username = username))
     }
 
     override suspend fun toggleMovieUnwatched(movie: MovieDetail) {
-        movieDetailDao.toggleMovieUnwatched(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.toggleMovieUnwatched(movie.copy(username = username))
     }
 
     override suspend fun isMovieSaved(id: Int): Boolean {
-        return movieDetailDao.isMovieSaved(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return movieDetailDao.isMovieSaved(id, username)
     }
 
     override suspend fun isMovieUnwatched(id: Int): Boolean {
-        return movieDetailDao.isMovieUnwatched(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return movieDetailDao.isMovieUnwatched(id, username)
     }
 
     override suspend fun isMovieWatched(id: Int): Boolean {
-        return movieDetailDao.isMovieWatched(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return movieDetailDao.isMovieWatched(id, username)
     }
 
     override fun getSavedMovies(username: String): Flow<List<MovieDetail>> =

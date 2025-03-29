@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TvShowDetailDao {
 
-    @Query("SELECT * FROM TvShowDetail WHERE id = :id")
-    suspend fun getById(id: Int): TvShowDetail?
+    @Query("SELECT * FROM TvShowDetail WHERE id = :id AND username = :username")
+    suspend fun getById(id: Int, username: String): TvShowDetail?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(tvShowDetail: TvShowDetail)
@@ -18,7 +18,7 @@ interface TvShowDetailDao {
 
     @Transaction
     suspend fun toggleTvShowLike(tvShow: TvShowDetail) {
-        val existing = getById(tvShow.id)
+        val existing = getById(tvShow.id, tvShow.username)
         if (existing == null) {
             save(tvShow.copy(liked = true))
         } else {
@@ -28,9 +28,9 @@ interface TvShowDetailDao {
 
     @Transaction
     suspend fun toggleTvShowWatched(tvShow: TvShowDetail) {
-        val existing = getById(tvShow.id)
+        val existing = getById(tvShow.id, tvShow.username)
         if (existing == null) {
-            save(tvShow.copy(isWatched = true))
+            save(tvShow.copy(isWatched = true, isUnwatched = false))
         } else {
             save(existing.copy(isWatched = !existing.isWatched, isUnwatched = false))
         }
@@ -38,22 +38,22 @@ interface TvShowDetailDao {
 
     @Transaction
     suspend fun toggleTvShowUnwatched(tvShow: TvShowDetail) {
-        val existing = getById(tvShow.id)
+        val existing = getById(tvShow.id, tvShow.username)
         if (existing == null) {
-            save(tvShow.copy(isUnwatched = true))
+            save(tvShow.copy(isUnwatched = true, isWatched = false))
         } else {
             save(existing.copy(isUnwatched = !existing.isUnwatched, isWatched = false))
         }
     }
 
-    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND liked = 1)")
-    suspend fun isTvShowSaved(id: Int): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND liked = 1)")
+    suspend fun isTvShowSaved(id: Int, username: String): Boolean
 
-    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND isWatched = 1)")
-    suspend fun isTvShowWatched(id: Int): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND isWatched = 1)")
+    suspend fun isTvShowWatched(id: Int, username: String): Boolean
 
-    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND isUnwatched = 1)")
-    suspend fun isTvShowUnwatched(id: Int): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND isUnwatched = 1)")
+    suspend fun isTvShowUnwatched(id: Int, username: String): Boolean
 
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1 AND username = :username")
     fun getSavedTvShows(username: String): Flow<List<TvShowDetail>>

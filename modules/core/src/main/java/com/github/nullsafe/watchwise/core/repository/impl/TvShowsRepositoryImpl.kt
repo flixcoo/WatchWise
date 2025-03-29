@@ -251,35 +251,43 @@ class TvShowsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveTvShow(tvShow: TvShowDetail) {
-        tvShowDetailDao.save(tvShow)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        tvShowDetailDao.save(tvShow.copy(username = username))
     }
 
     override suspend fun removeTvShow(tvShow: TvShowDetail) {
-        tvShowDetailDao.delete(tvShow)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        tvShowDetailDao.delete(tvShow.copy(username = username))
     }
 
     override suspend fun toggleTvShowLike(tvShow: TvShowDetail) {
-        tvShowDetailDao.toggleTvShowLike(tvShow)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        tvShowDetailDao.toggleTvShowLike(tvShow.copy(username = username))
     }
 
     override suspend fun toggleTvShowWatched(tvShow: TvShowDetail) {
-        tvShowDetailDao.toggleTvShowWatched(tvShow)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        tvShowDetailDao.toggleTvShowWatched(tvShow.copy(username = username))
     }
 
     override suspend fun toggleTvShowUnwatched(tvShow: TvShowDetail) {
-        tvShowDetailDao.toggleTvShowUnwatched(tvShow)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        tvShowDetailDao.toggleTvShowUnwatched(tvShow.copy(username = username))
     }
 
     override suspend fun isTvShowSaved(id: Int): Boolean {
-        return tvShowDetailDao.isTvShowSaved(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return tvShowDetailDao.isTvShowSaved(id, username)
     }
 
     override suspend fun isTvShowWatched(id: Int): Boolean {
-        return tvShowDetailDao.isTvShowWatched(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return tvShowDetailDao.isTvShowWatched(id, username)
     }
 
     override suspend fun isTvShowUnwatched(id: Int): Boolean {
-        return tvShowDetailDao.isTvShowUnwatched(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return tvShowDetailDao.isTvShowUnwatched(id, username)
     }
 
     override fun getSavedTvShows(username: String): Flow<List<TvShowDetail>> =
