@@ -43,15 +43,15 @@ class TvShowDetailsViewModel @AssistedInject constructor(
 
             val tvShow = (tvShowDetailsResult as? ResultWrapper.Success)?.data
             if (tvShow != null) {
-                val isSaved = tvShowsRepository.isTvShowSaved(tvShow.id)
+                val isLiked = tvShowsRepository.isTvShowSaved(tvShow.id)
                 val isWatched = tvShowsRepository.isTvShowWatched(tvShow.id)
                 val isUnwatched = tvShowsRepository.isTvShowUnwatched(tvShow.id)
 
                 state = state.copy(
                     tvShow = tvShow.copy(
-                        liked = isSaved,
-                        isWatched = isWatched,
-                        isUnwatched = isUnwatched
+                        liked = isLiked,
+                        watched = isWatched,
+                        unwatched = isUnwatched
                     ),
                     isError = false
                 )
@@ -167,8 +167,8 @@ class TvShowDetailsViewModel @AssistedInject constructor(
                         tvShowsRepository.toggleTvShowWatched(tvShow)
                         state = state.copy(
                             tvShow = tvShow.copy(
-                                isWatched = !tvShow.isWatched,
-                                isUnwatched = if (tvShow.isWatched) tvShow.isUnwatched else false
+                                watched = !tvShow.watched,
+                                unwatched = if (tvShow.watched) tvShow.unwatched else false
                             )
                         )
                     }
@@ -181,8 +181,8 @@ class TvShowDetailsViewModel @AssistedInject constructor(
                         tvShowsRepository.toggleTvShowUnwatched(tvShow)
                         state = state.copy(
                             tvShow = tvShow.copy(
-                                isUnwatched = !tvShow.isUnwatched,
-                                isWatched = if (tvShow.isUnwatched) tvShow.isWatched else false
+                                unwatched = !tvShow.unwatched,
+                                watched = if (tvShow.unwatched) tvShow.watched else false
                             )
                         )
                     }

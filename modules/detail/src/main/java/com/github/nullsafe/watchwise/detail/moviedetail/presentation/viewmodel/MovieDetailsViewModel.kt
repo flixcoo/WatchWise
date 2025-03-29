@@ -45,12 +45,12 @@ class MovieDetailsViewModel @AssistedInject constructor(
             if (movie != null) {
                 val isUnwatched = moviesRepository.isMovieUnwatched(movie.id)
                 val isWatched = moviesRepository.isMovieWatched(movie.id)
-                val isSaved = moviesRepository.isMovieSaved(movie.id)
+                val isLiked = moviesRepository.isMovieSaved(movie.id)
                 state = state.copy(
                     movie = movie.copy(
-                        liked = isSaved,
-                        isWatched = isWatched,
-                        isUnwatched = isUnwatched
+                        liked = isLiked,
+                        watched = isWatched,
+                        unwatched = isUnwatched
                     ),
                     isError = false
                 )
@@ -164,8 +164,8 @@ class MovieDetailsViewModel @AssistedInject constructor(
                         moviesRepository.toggleMovieWatched(movie)
                         state = state.copy(
                             movie = movie.copy(
-                                isWatched = !movie.isWatched,
-                                isUnwatched = if (movie.isWatched) movie.isUnwatched else false
+                                watched = !movie.watched,
+                                unwatched = if (movie.watched) movie.unwatched else false
                             )
                         )
                     }
@@ -178,8 +178,8 @@ class MovieDetailsViewModel @AssistedInject constructor(
                         moviesRepository.toggleMovieUnwatched(movie)
                         state = state.copy(
                             movie = movie.copy(
-                                isUnwatched = !movie.isUnwatched,
-                                isWatched = if (movie.isUnwatched) movie.isWatched else false
+                                unwatched = !movie.unwatched,
+                                watched = if (movie.unwatched) movie.watched else false
                             )
                         )
                     }

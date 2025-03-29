@@ -46,13 +46,12 @@ data class TvShowDetail(
     val type: String?,
     val voteAverage: Double?,
     val voteCount: Int?,
-    val liked: Boolean,
-    val isUnwatched: Boolean = false,
-    val isWatched: Boolean = false,
-    val isFavourite: Boolean = false,
+    val username: String,
+    val liked: Boolean = false,
+    val unwatched: Boolean = false,
+    val watched: Boolean = false,
     val creditsCasts: List<CreditsCast>,
-    val similarTvShows: List<TvShow>,
-    val username: String
+    val similarTvShows: List<TvShow>
 )
 
 data class LastEpisodeToAir(
