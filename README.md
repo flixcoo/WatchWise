@@ -10,7 +10,7 @@
 
 **The app to manage your movies, TV shows, and favorite stars!**
 
----
+
 
 ## 📱 Description
 WatchWise is a modern Android app built with a multi-module structure, one main activity, and several fragments. It combines local storage (Room) with cloud functionality (Azure Functions) and uses the TMDB API.
