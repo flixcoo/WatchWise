@@ -129,5 +129,10 @@
     <string name="confirm_profile">Bestätigen</string>
     <string name="cancel_profile">Abbrechen</string>
     <string name="logout_profile">Logout</string>
+    <string name="rule1_profile">Mindestens 8 Zeichen</string>
+    <string name="rule2_profile">Mindestens 1 Großbuchstabe</string>
+    <string name="rule3_profile">Mindestens 1 Kleinbuchstabe</string>
+    <string name="rule4_profile">Mindestens 1 Zahl</string>
+    <string name="rule5_profile">Mindestens 1 Sonderzeichen</string>
 
 </resources>

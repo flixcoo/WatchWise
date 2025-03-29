@@ -1,6 +1,7 @@
 package com.github.nullsafe.watchwise.profile.presentation.compose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.*
@@ -147,12 +149,33 @@ fun ProfileScreen(
                     }
                 )
 
-                Column(modifier = Modifier.padding(top = 8.dp)) {
-                    RuleCheck("Mindestens 8 Zeichen", hasMinLength(password))
-                    RuleCheck("Mindestens 1 Großbuchstabe", hasUpperCase(password))
-                    RuleCheck("Mindestens 1 Kleinbuchstabe", hasLowerCase(password))
-                    RuleCheck("Mindestens 1 Zahl", hasDigit(password))
-                    RuleCheck("Mindestens 1 Sonderzeichen", hasSpecialChar(password))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    AppTheme.colors.background.ghost.copy(alpha = 0.9f),
+                                    AppTheme.colors.background.ghost.copy(alpha = 0.5f)
+                                )
+                            ),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = AppTheme.colors.background.border,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        RuleCheck(context.getString(R.string.rule1_profile), hasMinLength(password))
+                        RuleCheck(context.getString(R.string.rule2_profile), hasUpperCase(password))
+                        RuleCheck(context.getString(R.string.rule3_profile), hasLowerCase(password))
+                        RuleCheck(context.getString(R.string.rule4_profile), hasDigit(password))
+                        RuleCheck(context.getString(R.string.rule5_profile), hasSpecialChar(password))
+                    }
                 }
 
                 if (passwordError != null) {
@@ -190,7 +213,7 @@ fun ProfileScreen(
                                                 hasDigit(password) &&
                                                 hasSpecialChar(password)
                                         )) {
-                                passwordError = "Passwort erfüllt nicht alle Kriterien"
+                                passwordError = "Password does not meet all criteria"
                             }
 
                             if (usernameError == null && passwordError == null) {

@@ -16,12 +16,27 @@ import com.github.nullsafe.watchwise.compose.theme.AppTheme
 
 @Composable
 fun RuleCheck(text: String, passed: Boolean) {
-    val color = if (passed) Color(0xFF4CAF50) else Color.Red
-    val icon = if (passed) Icons.Filled.Check else Icons.Filled.Close
+    val color = if (passed) Color(0xFF81C784) else Color(0xFFFF6F61)
+    val icon = if (passed) Icons.Default.Check else Icons.Default.Close
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(18.dp))
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text, color = color, style = AppTheme.typography.body)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier
+                .size(18.dp)
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(
+            text = text,
+            color = color,
+            style = AppTheme.typography.body
+        )
     }
 }
