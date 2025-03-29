@@ -245,7 +245,7 @@ fun ProfileScreen(
                                 modifier = Modifier.size(24.dp)
                             )
                         } else {
-                            Text("Login", style = AppTheme.typography.title2)
+                            Text(context.getString(R.string.login_profile), style = AppTheme.typography.title2)
                         }
                     }
                 }
@@ -280,7 +280,7 @@ fun ProfileScreen(
                     OutlinedTextField(
                         value = newPassword,
                         onValueChange = { newPassword = it },
-                        placeholder = { Text("New Password", color = AppTheme.colors.type.secondary) },
+                        placeholder = { Text(context.getString(R.string.new_password_profile), color = AppTheme.colors.type.secondary) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -319,7 +319,7 @@ fun ProfileScreen(
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.theme.tint)
                         ) {
-                            Text("Confirm")
+                            Text(context.getString(R.string.confirm_profile))
                         }
 
                         Button(
@@ -331,7 +331,7 @@ fun ProfileScreen(
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                         ) {
-                            Text("Cancel")
+                            Text(context.getString(R.string.cancel_profile))
                         }
                     }
                 }
@@ -409,7 +409,7 @@ fun ProfileScreen(
                                 containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f)
                             )
                         ) {
-                            Text("Logout")
+                            Text(context.getString(R.string.logout_profile))
                         }
                     }
                 }

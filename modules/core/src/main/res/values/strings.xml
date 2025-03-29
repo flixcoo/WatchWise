@@ -127,5 +127,10 @@
     <string name="active_profile">Active Profile</string>
     <string name="change_profile">Change Profile</string>
     <string name="delete_profile">Delete Profile</string>
+    <string name="login_profile">Login</string>
+    <string name="new_password_profile">New Password</string>
+    <string name="confirm_profile">Confirm</string>
+    <string name="cancel_profile">Cancel</string>
+    <string name="logout_profile">Logout</string>
 
 </resources>

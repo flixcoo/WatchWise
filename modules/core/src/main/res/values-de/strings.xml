@@ -124,5 +124,10 @@
     <string name="active_profile">Aktives Profil</string>
     <string name="change_profile">Profil ändern</string>
     <string name="delete_profile">Profil löschen</string>
+    <string name="login_profile">Login</string>
+    <string name="new_password_profile">Neues Passwort</string>
+    <string name="confirm_profile">Bestätigen</string>
+    <string name="cancel_profile">Abbrechen</string>
+    <string name="logout_profile">Logout</string>
 
 </resources>
