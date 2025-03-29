@@ -27,11 +27,10 @@ data class MovieDetail(
     val voteCount: Int?,
     val backdropPath: String?,
     val posterPath: String?,
-    val liked: Boolean,
-    val isUnwatched: Boolean = false,
-    val isWatched: Boolean = false,
-    val isFavourite: Boolean = false,
+    val username: String,
+    val liked: Boolean = false,
+    val unwatched: Boolean = false,
+    val watched: Boolean = false,
     val creditsCasts: List<CreditsCast>,
-    val similarMovies: List<Movie>,
-    val username: String
+    val similarMovies: List<Movie>
 )

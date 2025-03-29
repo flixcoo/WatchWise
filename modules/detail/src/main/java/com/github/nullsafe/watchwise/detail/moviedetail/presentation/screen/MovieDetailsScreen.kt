@@ -122,8 +122,8 @@ fun MovieDetailsScreen(
                                 onClick = {
                                     onAction(MovieDetailsAction.ToggleUnwatched)
 
-                                    state.movie?.isUnwatched?.let{
-                                        val unwatched = !state.movie.isUnwatched
+                                    state.movie?.unwatched?.let{
+                                        val unwatched = !state.movie.unwatched
 
                                         val message = if (unwatched) {
                                             context.getString(
@@ -142,19 +142,19 @@ fun MovieDetailsScreen(
                                     }
                                 }
                             ) { Icon(
-                                imageVector = if (state.movie?.isUnwatched == true)
+                                imageVector = if (state.movie?.unwatched == true)
                                     Icons.Filled.VisibilityOff
                                 else
                                     Icons.Outlined.VisibilityOff,
                                 contentDescription = "",
-                                tint = if (state.movie?.isUnwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                tint = if (state.movie?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                             )}
                             IconButton(
                                 onClick = {
                                     onAction(MovieDetailsAction.ToggleWatched)
 
-                                    state.movie?.isWatched?.let{
-                                        val watched = !state.movie.isWatched
+                                    state.movie?.watched?.let{
+                                        val watched = !state.movie.watched
 
                                         val message = if (watched) {
                                             context.getString(
@@ -173,12 +173,12 @@ fun MovieDetailsScreen(
                                     }
                                 }
                             ) { Icon(
-                                imageVector = if (state.movie?.isWatched == true)
+                                imageVector = if (state.movie?.watched == true)
                                     Icons.Filled.CheckCircle
                                 else
                                     Icons.Outlined.CheckCircleOutline,
                                 contentDescription = "",
-                                tint = if (state.movie?.isWatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                tint = if (state.movie?.watched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                             )}
                             IconButton(
                                 onClick = {

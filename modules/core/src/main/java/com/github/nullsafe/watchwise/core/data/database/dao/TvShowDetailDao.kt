@@ -30,9 +30,9 @@ interface TvShowDetailDao {
     suspend fun toggleTvShowWatched(tvShow: TvShowDetail) {
         val existing = getById(tvShow.id, tvShow.username)
         if (existing == null) {
-            save(tvShow.copy(isWatched = true, isUnwatched = false))
+            save(tvShow.copy(watched = true, unwatched = false))
         } else {
-            save(existing.copy(isWatched = !existing.isWatched, isUnwatched = false))
+            save(existing.copy(watched = !existing.watched, unwatched = false))
         }
     }
 
@@ -40,28 +40,28 @@ interface TvShowDetailDao {
     suspend fun toggleTvShowUnwatched(tvShow: TvShowDetail) {
         val existing = getById(tvShow.id, tvShow.username)
         if (existing == null) {
-            save(tvShow.copy(isUnwatched = true, isWatched = false))
+            save(tvShow.copy(unwatched = true, watched = false))
         } else {
-            save(existing.copy(isUnwatched = !existing.isUnwatched, isWatched = false))
+            save(existing.copy(unwatched = !existing.unwatched, watched = false))
         }
     }
 
     @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND liked = 1)")
     suspend fun isTvShowSaved(id: Int, username: String): Boolean
 
-    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND isWatched = 1)")
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND watched = 1)")
     suspend fun isTvShowWatched(id: Int, username: String): Boolean
 
-    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND isUnwatched = 1)")
+    @Query("SELECT EXISTS(SELECT * FROM TvShowDetail WHERE id = :id AND username = :username AND unwatched = 1)")
     suspend fun isTvShowUnwatched(id: Int, username: String): Boolean
 
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1 AND username = :username")
     fun getSavedTvShows(username: String): Flow<List<TvShowDetail>>
 
-    @Query("SELECT * FROM TvShowDetail WHERE isUnwatched = 1 AND username = :username")
+    @Query("SELECT * FROM TvShowDetail WHERE unwatched = 1 AND username = :username")
     fun getTvShowsUnwatched(username: String): Flow<List<TvShowDetail>>
 
-    @Query("SELECT * FROM TvShowDetail WHERE isWatched = 1 AND username = :username")
+    @Query("SELECT * FROM TvShowDetail WHERE watched = 1 AND username = :username")
     fun getTvShowsWatched(username: String): Flow<List<TvShowDetail>>
 
     @Query("SELECT * FROM TvShowDetail WHERE liked = 1 AND username = :username")

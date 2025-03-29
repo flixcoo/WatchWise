@@ -48,14 +48,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.VisibilityOff
@@ -93,7 +89,6 @@ import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
 import com.github.nullsafe.watchwise.core.data.database.entity.ProductionCompany
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShow
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShowType
-import com.github.nullsafe.watchwise.detail.moviedetail.presentation.state.MovieDetailsAction
 import com.github.nullsafe.watchwise.util.extension.getYearFromReleaseDate
 import kotlinx.coroutines.launch
 
@@ -125,8 +120,8 @@ fun TvShowDetailsScreen(
                                 onClick = {
                                     onAction(TvShowDetailsAction.ToggleUnwatched)
 
-                                    state.tvShow?.isUnwatched?.let{
-                                        val unwatched = !state.tvShow.isUnwatched
+                                    state.tvShow?.unwatched?.let{
+                                        val unwatched = !state.tvShow.unwatched
 
                                         val message = if (unwatched) {
                                             context.getString(
@@ -145,20 +140,20 @@ fun TvShowDetailsScreen(
                                     }
                                 }
                             ) { Icon(
-                                imageVector = if (state.tvShow?.isUnwatched == true)
+                                imageVector = if (state.tvShow?.unwatched == true)
                                     Icons.Filled.VisibilityOff
                                 else
                                     Icons.Outlined.VisibilityOff,
                                 contentDescription = "",
-                                tint = if (state.tvShow?.isUnwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                tint = if (state.tvShow?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                             )}
 
                             IconButton(
                                 onClick = {
                                     onAction(TvShowDetailsAction.ToggleWatched)
 
-                                    state.tvShow?.isWatched?.let{
-                                        val watched = !state.tvShow.isWatched
+                                    state.tvShow?.watched?.let{
+                                        val watched = !state.tvShow.watched
 
                                         val message = if (watched) {
                                             context.getString(
@@ -177,12 +172,12 @@ fun TvShowDetailsScreen(
                                     }
                                 }
                             ) { Icon(
-                                imageVector = if (state.tvShow?.isWatched == true)
+                                imageVector = if (state.tvShow?.watched == true)
                                     Icons.Filled.CheckCircle
                                 else
                                     Icons.Outlined.CheckCircleOutline,
                                 contentDescription = "",
-                                tint = if (state.tvShow?.isWatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                tint = if (state.tvShow?.watched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                             )}
                             IconButton(
                                 onClick = {
