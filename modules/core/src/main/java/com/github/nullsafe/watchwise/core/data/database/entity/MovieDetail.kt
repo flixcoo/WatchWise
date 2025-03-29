@@ -1,11 +1,10 @@
 package com.github.nullsafe.watchwise.core.data.database.entity
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity
+@Entity(primaryKeys = ["id", "username"])
 data class MovieDetail(
-    @PrimaryKey val id: Int,
+    val id: Int,
     val adult: Boolean?,
     val budget: Int?,
     val genres: List<Genre>?,
@@ -33,5 +32,6 @@ data class MovieDetail(
     val isWatched: Boolean = false,
     val isFavourite: Boolean = false,
     val creditsCasts: List<CreditsCast>,
-    val similarMovies: List<Movie>
+    val similarMovies: List<Movie>,
+    val username: String
 )

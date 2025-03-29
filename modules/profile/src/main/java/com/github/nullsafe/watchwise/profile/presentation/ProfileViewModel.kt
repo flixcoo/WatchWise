@@ -8,11 +8,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.compose.runtime.State
-
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
+import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository
+    private val userPreferencesManager: UserPreferencesManager
 ) : ViewModel() {
 
     private val _activeProfile = mutableStateOf<String?>(null)
@@ -24,6 +26,13 @@ class ProfileViewModel @Inject constructor(
     private val _registrationSuccess = mutableStateOf<Boolean?>(null)
     val registrationSuccess: State<Boolean?> get() = _registrationSuccess
 
+    init {
+        viewModelScope.launch {
+            userPreferencesManager.userPreferencesFlow.collectLatest { prefs ->
+                _activeProfile.value = prefs.userName.takeIf { it.isNotEmpty() }
+            }
+        }
+    }
 
     fun register(username: String, password: String) {
         viewModelScope.launch {
@@ -33,6 +42,7 @@ class ProfileViewModel @Inject constructor(
             _registrationSuccess.value = success
             if (success) {
                 _activeProfile.value = username
+                userPreferencesManager.updateUserName(username)
                 error.value = null
             } else {
                 error.value = "Registration failed"
@@ -47,10 +57,19 @@ class ProfileViewModel @Inject constructor(
             loading.value = false
             if (success) {
                 _activeProfile.value = username
+                userPreferencesManager.updateUserName(username)
                 error.value = null
             } else {
                 error.value = "Login failed"
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            _activeProfile.value = null
+            userPreferencesManager.clearUserName()
+            error.value = null
         }
     }
 
@@ -70,12 +89,11 @@ class ProfileViewModel @Inject constructor(
             loading.value = false
             if (success) {
                 _activeProfile.value = null
+                userPreferencesManager.clearUserName()
                 error.value = null
             } else {
                 error.value = "Delete failed"
             }
         }
     }
-
-
 }

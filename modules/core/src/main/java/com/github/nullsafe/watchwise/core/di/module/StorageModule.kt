@@ -83,6 +83,7 @@ class StorageModule {
             .addTypeConverter(movieConverter)
             .fallbackToDestructiveMigration()
             .addMigrations(AppDatabase.MIGRATION_2_3)
+            .addMigrations(AppDatabase.MIGRATION_3_4)
             .build()
     }
 }
