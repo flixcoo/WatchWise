@@ -2,7 +2,16 @@ package com.github.nullsafe.watchwise.profile.presentation.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,8 +20,25 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,7 +46,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
@@ -88,7 +117,12 @@ fun ProfileScreen(
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    placeholder = { Text(context.getString(R.string.username), color = AppTheme.colors.type.secondary) },
+                    placeholder = {
+                        Text(
+                            context.getString(R.string.username),
+                            color = AppTheme.colors.type.secondary
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -101,7 +135,12 @@ fun ProfileScreen(
                         unfocusedIndicatorColor = AppTheme.colors.type.secondary
                     ),
                     singleLine = true,
-                    leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Profile Icon") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Person,
+                            contentDescription = "Profile Icon"
+                        )
+                    },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Next
@@ -122,7 +161,12 @@ fun ProfileScreen(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text(context.getString(R.string.password), color = AppTheme.colors.type.secondary) },
+                    placeholder = {
+                        Text(
+                            context.getString(R.string.password),
+                            color = AppTheme.colors.type.secondary
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -142,7 +186,8 @@ fun ProfileScreen(
                         imeAction = ImeAction.Done
                     ),
                     trailingIcon = {
-                        val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val icon =
+                            if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(icon, contentDescription = "Toggle Password Visibility")
                         }
@@ -174,7 +219,10 @@ fun ProfileScreen(
                         RuleCheck(context.getString(R.string.rule2_profile), hasUpperCase(password))
                         RuleCheck(context.getString(R.string.rule3_profile), hasLowerCase(password))
                         RuleCheck(context.getString(R.string.rule4_profile), hasDigit(password))
-                        RuleCheck(context.getString(R.string.rule5_profile), hasSpecialChar(password))
+                        RuleCheck(
+                            context.getString(R.string.rule5_profile),
+                            hasSpecialChar(password)
+                        )
                     }
                 }
 
@@ -195,6 +243,41 @@ fun ProfileScreen(
                 ) {
                     Button(
                         onClick = {
+                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                                viewModel.login(username, password)
+                                username = ""
+                                password = ""
+                            }
+                        },
+                        enabled = !isLoading && username.isNotBlank() && password.isNotBlank(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.7f),
+                            contentColor = AppTheme.colors.type.inverse,
+                            disabledContainerColor = AppTheme.colors.theme.tint.copy(alpha = 0.3f),
+                            disabledContentColor = AppTheme.colors.type.inverse,
+
+                            )
+                    ) {
+                        if (isLoading) {
+                            CircularProgressIndicator(
+                                color = AppTheme.colors.type.inverse,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Text(
+                                context.getString(R.string.login_profile),
+                                style = AppTheme.typography.title2
+                            )
+                        }
+                    }
+
+                    Button(
+                        onClick = {
                             usernameError = null
                             passwordError = null
 
@@ -212,7 +295,8 @@ fun ProfileScreen(
                                                 hasLowerCase(password) &&
                                                 hasDigit(password) &&
                                                 hasSpecialChar(password)
-                                        )) {
+                                        )
+                            ) {
                                 passwordError = "Password does not meet all criteria"
                             }
 
@@ -222,14 +306,31 @@ fun ProfileScreen(
                                 password = ""
                             }
                         },
-                        enabled = !isLoading,
+                        enabled = !isLoading && username.isNotBlank() && password.isNotBlank(),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp),
+                            .height(56.dp)
+                            .then(
+                                if (!isLoading && username.isNotBlank() && password.isNotBlank()) {
+                                    Modifier.border(
+                                        width = 3.dp,
+                                        color = AppTheme.colors.theme.tint.copy(alpha = 0.8f),
+                                        shape = RoundedCornerShape(16.dp)
+                                    )
+                                } else {
+                                    Modifier.border(
+                                        width = 3.dp,
+                                        color = AppTheme.colors.type.secondary.copy(alpha = 0.4f),
+                                        shape = RoundedCornerShape(16.dp)
+                                    )
+                                }
+                            ),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = AppTheme.colors.type.ghost,
-                            contentColor = AppTheme.colors.type.inverse
+                            containerColor = AppTheme.colors.theme.tintBg,
+                            contentColor = AppTheme.colors.type.inverse,
+                            disabledContainerColor = AppTheme.colors.theme.tintBg,
+                            disabledContentColor = AppTheme.colors.type.inverse
                         )
                     ) {
                         if (isLoading) {
@@ -239,38 +340,14 @@ fun ProfileScreen(
                                 modifier = Modifier.size(24.dp)
                             )
                         } else {
-                            Text(context.getString(R.string.create_profile), style = AppTheme.typography.title2)
+                            Text(
+                                context.getString(R.string.create_profile),
+                                style = AppTheme.typography.title2
+                            )
                         }
                     }
 
-                    Button(
-                        onClick = {
-                            if (username.isNotEmpty() && password.isNotEmpty()) {
-                                viewModel.login(username, password)
-                                username = ""
-                                password = ""
-                            }
-                        },
-                        enabled = !isLoading,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
-                            contentColor = AppTheme.colors.type.inverse
-                        )
-                    ) {
-                        if (isLoading) {
-                            CircularProgressIndicator(
-                                color = AppTheme.colors.type.inverse,
-                                strokeWidth = 2.dp,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        } else {
-                            Text(context.getString(R.string.login_profile), style = AppTheme.typography.title2)
-                        }
-                    }
+
                 }
 
                 registrationSuccess?.let { success ->
@@ -303,7 +380,12 @@ fun ProfileScreen(
                     OutlinedTextField(
                         value = newPassword,
                         onValueChange = { newPassword = it },
-                        placeholder = { Text(context.getString(R.string.new_password_profile), color = AppTheme.colors.type.secondary) },
+                        placeholder = {
+                            Text(
+                                context.getString(R.string.new_password_profile),
+                                color = AppTheme.colors.type.secondary
+                            )
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
@@ -318,7 +400,8 @@ fun ProfileScreen(
                         ),
                         visualTransformation = if (newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val icon = if (newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                            val icon =
+                                if (newPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                             IconButton(onClick = { newPasswordVisible = !newPasswordVisible }) {
                                 Icon(icon, contentDescription = "Toggle Password Visibility")
                             }
