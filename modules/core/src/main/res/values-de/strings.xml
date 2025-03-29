@@ -129,10 +129,14 @@
     <string name="confirm_profile">Bestätigen</string>
     <string name="cancel_profile">Abbrechen</string>
     <string name="logout_profile">Logout</string>
-    <string name="rule1_profile">Mindestens 8 Zeichen</string>
-    <string name="rule2_profile">Mindestens 1 Großbuchstabe</string>
-    <string name="rule3_profile">Mindestens 1 Kleinbuchstabe</string>
-    <string name="rule4_profile">Mindestens 1 Zahl</string>
-    <string name="rule5_profile">Mindestens 1 Sonderzeichen</string>
-
+    <string name="passwort_rulecheck_1">Mindestens 8 Zeichen</string>
+    <string name="passwort_rulecheck_2">Mindestens 1 Großbuchstabe</string>
+    <string name="passwort_rulecheck_3">Mindestens 1 Kleinbuchstabe</string>
+    <string name="passwort_rulecheck_4">Mindestens 1 Zahl</string>
+    <string name="passwort_rulecheck_5">Mindestens 1 Sonderzeichen</string>
+    <string name="login_error_1">Benutzername oder Passwort ist falsch oder existiert nicht</string>
+    <string name="login_error_2">"Benutzername darf nicht leer sein</string>
+    <string name="login_error_3">Benutzername muss mindestens fünf Zeichen lang sein</string>
+    <string name="login_error_4">Passwort darf nicht leer sein</string>
+    <string name="login_error_5">Passwort erfüllt nicht alle Kriterien</string>
 </resources>

@@ -132,10 +132,15 @@
     <string name="confirm_profile">Confirm</string>
     <string name="cancel_profile">Cancel</string>
     <string name="logout_profile">Logout</string>
-    <string name="rule1_profile">At least 8 characters</string>
-    <string name="rule2_profile">At least 1 capital letter</string>
-    <string name="rule3_profile">At least 1 lowercase letter</string>
-    <string name="rule4_profile">At least 1 numberAt least 1 number</string>
-    <string name="rule5_profile">At least 1 special character</string>
+    <string name="passwort_rulecheck_1">At least 8 characters</string>
+    <string name="passwort_rulecheck_2">At least 1 capital letter</string>
+    <string name="passwort_rulecheck_3">At least 1 lowercase letter</string>
+    <string name="passwort_rulecheck_4">At least 1 numberAt least 1 number</string>
+    <string name="passwort_rulecheck_5">At least 1 special character</string>
+    <string name="login_error_1">Username or password is wrong or does not exist</string>
+    <string name="login_error_2">"Username must not be empty</string>
+    <string name="login_error_3">Username must at least be 5 chars long</string>
+    <string name="login_error_4">Password must not be empty</string>
+    <string name="login_error_5">Password does not meet all criteria</string>
 
 </resources>

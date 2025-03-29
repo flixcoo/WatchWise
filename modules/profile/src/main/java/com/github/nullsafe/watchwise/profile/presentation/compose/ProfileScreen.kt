@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 import com.github.nullsafe.watchwise.profile.R
 import com.github.nullsafe.watchwise.profile.presentation.ProfileViewModel
+import com.github.nullsafe.watchwise.profile.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +63,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
     val context = LocalContext.current
+    var showPasswordValidation by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -76,7 +78,9 @@ fun ProfileScreen(
 
     val activeProfile by viewModel.activeProfile
     val isLoading by viewModel.loading
-    val error by viewModel.error
+    var error by viewModel.error
+
+    var errorRed = Color(0xFFFF6F61)
 
     Scaffold(
         topBar = {
@@ -150,9 +154,10 @@ fun ProfileScreen(
                 if (usernameError != null) {
                     Text(
                         text = usernameError!!,
-                        color = Color.Red,
+                        color = errorRed,
                         style = AppTheme.typography.body,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier.padding(top = 4.dp),
+                        textAlign = TextAlign.Center
                     )
                 }
 
@@ -194,56 +199,98 @@ fun ProfileScreen(
                     }
                 )
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    AppTheme.colors.background.ghost.copy(alpha = 0.9f),
-                                    AppTheme.colors.background.ghost.copy(alpha = 0.5f)
-                                )
-                            ),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = AppTheme.colors.background.border,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(16.dp)
-                ) {
-                    Column {
-                        RuleCheck(context.getString(R.string.rule1_profile), hasMinLength(password))
-                        RuleCheck(context.getString(R.string.rule2_profile), hasUpperCase(password))
-                        RuleCheck(context.getString(R.string.rule3_profile), hasLowerCase(password))
-                        RuleCheck(context.getString(R.string.rule4_profile), hasDigit(password))
-                        RuleCheck(
-                            context.getString(R.string.rule5_profile),
-                            hasSpecialChar(password)
-                        )
+                if (showPasswordValidation) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        AppTheme.colors.background.ghost.copy(alpha = 0.9f),
+                                        AppTheme.colors.background.ghost.copy(alpha = 0.5f)
+                                    )
+                                ),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = AppTheme.colors.background.border,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(16.dp)
+                    ) {
+                        Column {
+                            RuleCheck(
+                                context.getString(R.string.passwort_rulecheck_1),
+                                hasMinLength(password)
+                            )
+                            RuleCheck(
+                                context.getString(R.string.passwort_rulecheck_2),
+                                hasUpperCase(password)
+                            )
+                            RuleCheck(
+                                context.getString(R.string.passwort_rulecheck_3),
+                                hasLowerCase(password)
+                            )
+                            RuleCheck(
+                                context.getString(R.string.passwort_rulecheck_4),
+                                hasDigit(password)
+                            )
+                            RuleCheck(
+                                context.getString(R.string.passwort_rulecheck_5),
+                                hasSpecialChar(password)
+                            )
+                        }
                     }
                 }
 
                 if (passwordError != null) {
                     Text(
                         text = passwordError!!,
-                        color = Color.Red,
+                        color = errorRed,
                         style = AppTheme.typography.body,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+
+                    if (error != null) {
+                        Text(
+                            text = error!!,
+                            color = errorRed,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+
                     Button(
                         onClick = {
-                            if (username.isNotEmpty() && password.isNotEmpty()) {
+                            showPasswordValidation = false
+                            usernameError = null
+                            passwordError = null
+                            error = null
+
+                            if (username.isEmpty() || password.isEmpty() || username.length < 5 ||
+                                (!(
+                                        hasMinLength(password) &&
+                                                hasUpperCase(password) &&
+                                                hasLowerCase(password) &&
+                                                hasDigit(password) &&
+                                                hasSpecialChar(password)
+                                        )
+                                        )
+                            ) {
+                                passwordError = context.getString(Res.string.login_error_1)
+                            }
+
+                            if (usernameError == null && passwordError == null) {
                                 viewModel.login(username, password)
                                 username = ""
                                 password = ""
@@ -280,15 +327,21 @@ fun ProfileScreen(
                         onClick = {
                             usernameError = null
                             passwordError = null
+                            error = null
+
 
                             if (username.isEmpty()) {
-                                usernameError = "Username must not be empty"
+                                usernameError =
+                                    context.getString(Res.string.login_error_2) //"Username must not be empty"
                             } else if (username.length < 5) {
-                                usernameError = "Username must at least be 5 chars long"
+                                usernameError =
+                                    context.getString(Res.string.login_error_3)//"Username must at least be 5 chars long"
                             }
 
                             if (password.isEmpty()) {
-                                passwordError = "Password must not be empty"
+                                passwordError =
+                                    context.getString(Res.string.login_error_4)//"Password must not be empty"
+                                showPasswordValidation = true
                             } else if (!(
                                         hasMinLength(password) &&
                                                 hasUpperCase(password) &&
@@ -297,13 +350,15 @@ fun ProfileScreen(
                                                 hasSpecialChar(password)
                                         )
                             ) {
-                                passwordError = "Password does not meet all criteria"
+                                passwordError = context.getString(Res.string.login_error_5)
+                                showPasswordValidation = true
                             }
 
                             if (usernameError == null && passwordError == null) {
                                 viewModel.register(username, password)
                                 username = ""
                                 password = ""
+                                showPasswordValidation = false
                             }
                         },
                         enabled = !isLoading && username.isNotBlank() && password.isNotBlank(),
@@ -351,24 +406,18 @@ fun ProfileScreen(
                 }
 
                 registrationSuccess?.let { success ->
-                    val message = if (success) "registered successfully" else "registration failed"
+                    val message = if (!success) "registration failed" else ""
                     val color = if (success) Color(0xFF4CAF50) else Color.Red
 
                     Text(
                         text = message,
                         color = color,
                         style = AppTheme.typography.body,
-                        modifier = Modifier.padding(top = 12.dp)
+                        modifier = Modifier.padding(top = 12.dp),
+                        textAlign = TextAlign.Center
                     )
                 }
 
-                if (error != null) {
-                    Text(
-                        text = error!!,
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 12.dp)
-                    )
-                }
 
             } else if (showPasswordUpdateScreen) {
                 Column(
