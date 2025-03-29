@@ -332,15 +332,15 @@ fun ProfileScreen(
 
                             if (username.isEmpty()) {
                                 usernameError =
-                                    context.getString(Res.string.login_error_2) //"Username must not be empty"
+                                    context.getString(Res.string.login_error_2)
                             } else if (username.length < 5) {
                                 usernameError =
-                                    context.getString(Res.string.login_error_3)//"Username must at least be 5 chars long"
+                                    context.getString(Res.string.login_error_3)
                             }
 
                             if (password.isEmpty()) {
                                 passwordError =
-                                    context.getString(Res.string.login_error_4)//"Password must not be empty"
+                                    context.getString(Res.string.login_error_4)
                                 showPasswordValidation = true
                             } else if (!(
                                         hasMinLength(password) &&

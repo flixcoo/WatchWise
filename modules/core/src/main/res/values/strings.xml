@@ -95,25 +95,22 @@
         <item quantity="other">%1$d seasons</item>
     </plurals>
 
-
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>
 
+    <!-- List Names -->
     <string name="to_watch">Watchlist</string>
     <string name="seen">Seen</string>
     <string name="favourites">Favourites</string>
 
-
     <string name="watchlist_empty_message">No Movies or TV shows added yet. Add them now!</string>
     <string name="watchlist_empty_action">Browse Movies and TV Shows</string>
 
+    <!-- Snackbar Messages for Lists -->
     <string name="added_to_unwatched">%1$s was added to Watchlist</string>
     <string name="removed_from_unwatched">%1$s was removed from Watchlist</string>
-
     <string name="added_to_watched">%1$s was added to Seen</string>
     <string name="removed_from_watched">%1$s was removed from Seen</string>
-
-
     <string name="added_to_favorites">%1$s was added to Favorites</string>
     <string name="removed_from_favorites">%1$s was removed from Favorites</string>
 
@@ -132,11 +129,15 @@
     <string name="confirm_profile">Confirm</string>
     <string name="cancel_profile">Cancel</string>
     <string name="logout_profile">Logout</string>
+
+    <!-- Rulecheck Texts -->
     <string name="passwort_rulecheck_1">At least 8 characters</string>
     <string name="passwort_rulecheck_2">At least 1 capital letter</string>
     <string name="passwort_rulecheck_3">At least 1 lowercase letter</string>
     <string name="passwort_rulecheck_4">At least 1 numberAt least 1 number</string>
     <string name="passwort_rulecheck_5">At least 1 special character</string>
+
+    <!-- Login Errors -->
     <string name="login_error_1">Username or password is wrong or does not exist</string>
     <string name="login_error_2">"Username must not be empty</string>
     <string name="login_error_3">Username must at least be 5 chars long</string>

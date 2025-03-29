@@ -98,6 +98,7 @@
     <string name="movies">Filme</string>
     <string name="tv_shows">Serien</string>
 
+    <!-- List Names -->
     <string name="to_watch">Noch zu sehen</string>
     <string name="seen">Gesehen</string>
     <string name="favourites">Favoriten</string>
@@ -105,12 +106,11 @@
     <string name="watchlist_empty_message">Noch keine Filme oder Serien hinzugefügt. Füge jetzt welche hinzu!</string>
     <string name="watchlist_empty_action">Filme und Serien durchsuchen</string>
 
+    <!-- Snackbar Messages for Lists -->
     <string name="added_to_unwatched">%1$s wurde zu \"Noch zu sehen\" hinzugefügt</string>
     <string name="removed_from_unwatched">%1$s wurde von \"Noch zu sehen\" entfernt</string>
-
     <string name="added_to_watched">%1$s wurde zu \"Gesehen\" hinzugefügt</string>
     <string name="removed_from_watched">%1$s wurde von \"Gesehen\" entfernt</string>
-
     <string name="added_to_favorites">%1$s wurde zu Favoriten hinzugefügt</string>
     <string name="removed_from_favorites">%1$s wurde aus Favoriten entfernt</string>
 
@@ -129,11 +129,15 @@
     <string name="confirm_profile">Bestätigen</string>
     <string name="cancel_profile">Abbrechen</string>
     <string name="logout_profile">Logout</string>
+
+    <!-- Rulecheck Texts -->
     <string name="passwort_rulecheck_1">Mindestens 8 Zeichen</string>
     <string name="passwort_rulecheck_2">Mindestens 1 Großbuchstabe</string>
     <string name="passwort_rulecheck_3">Mindestens 1 Kleinbuchstabe</string>
     <string name="passwort_rulecheck_4">Mindestens 1 Zahl</string>
     <string name="passwort_rulecheck_5">Mindestens 1 Sonderzeichen</string>
+
+    <!-- Login Errors -->
     <string name="login_error_1">Benutzername oder Passwort ist falsch oder existiert nicht</string>
     <string name="login_error_2">"Benutzername darf nicht leer sein</string>
     <string name="login_error_3">Benutzername muss mindestens fünf Zeichen lang sein</string>
