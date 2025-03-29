@@ -40,7 +40,6 @@ import com.github.nullsafe.watchwise.core.data.database.entity.*
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun movieDao(): MovieDao
     abstract fun movieDetailDao(): MovieDetailDao
     abstract fun personDao(): PersonDao
@@ -48,13 +47,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun tvShowDao(): TvShowDao
     abstract fun tvShowDetailDao(): TvShowDetailDao
     abstract fun genresDao(): GenresDao
-
-    /*companion object {
-        val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE MovieDetail ADD COLUMN username TEXT NOT NULL DEFAULT ''")
-                database.execSQL("ALTER TABLE TvShowDetail ADD COLUMN username TEXT NOT NULL DEFAULT ''")
-            }
-        }
-    }*/
 }
