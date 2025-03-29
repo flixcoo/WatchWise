@@ -1,15 +1,15 @@
 package com.github.nullsafe.watchwise.profile.presentation
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
 import com.github.nullsafe.watchwise.profile.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.State
-import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
-import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -59,8 +59,6 @@ class ProfileViewModel @Inject constructor(
                 _activeProfile.value = username
                 userPreferencesManager.updateUserName(username)
                 error.value = null
-            } else {
-                error.value = "Login failed"
             }
         }
     }
