@@ -79,11 +79,6 @@ Additional Features:
 
 ---
 
-## 🧠 App Concept
-> The goal is to combine **local storage** (e.g., search history) with **cloud features** (e.g., user stats). The concept for the stats module is still in development.
-
----
-
 ## 🏪 App Store Description
 > **Discover and organize your movie collection like never before!**
 >
