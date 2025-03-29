@@ -9,7 +9,7 @@ import com.github.nullsafe.watchwise.core.data.dto.movie.MovieDetailDto
 import javax.inject.Inject
 
 class MovieDetailMapper @Inject constructor() {
-    fun map(dto: MovieDetailDto): MovieDetail {
+    fun map(dto: MovieDetailDto, username: String): MovieDetail {
         return MovieDetail(
             id = dto.id,
             title = dto.title,
@@ -36,7 +36,8 @@ class MovieDetailMapper @Inject constructor() {
             liked = false,
             creditsCasts = emptyList(),
             imdbId = dto.imdbId,
-            similarMovies = emptyList()
+            similarMovies = emptyList(),
+            username = username
         )
     }
 

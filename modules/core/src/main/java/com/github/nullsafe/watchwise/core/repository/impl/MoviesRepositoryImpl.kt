@@ -14,6 +14,7 @@ import com.github.nullsafe.watchwise.core.data.database.entity.Movie
 import com.github.nullsafe.watchwise.core.data.database.entity.MovieDetail
 import com.github.nullsafe.watchwise.core.data.database.entity.MovieType
 import com.github.nullsafe.watchwise.core.data.database.entity.Video
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
 import com.github.nullsafe.watchwise.core.data.dto.movie.ExternalIds
 import com.github.nullsafe.watchwise.core.data.mapper.CreditsCastMapper
 import com.github.nullsafe.watchwise.core.data.mapper.MovieDetailMapper
@@ -24,6 +25,7 @@ import com.github.nullsafe.watchwise.core.pager.movies.SimilarOrRecommendedMovie
 import com.github.nullsafe.watchwise.core.repository.MoviesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -39,7 +41,8 @@ class MoviesRepositoryImpl @Inject constructor(
     private val creditsMapper: CreditsCastMapper,
     private val movieDetailMapper: MovieDetailMapper,
     private val videoMapper: VideoMapper,
-    private val stringProvider: StringProvider
+    private val stringProvider: StringProvider,
+    private val userPreferencesManager: UserPreferencesManager
 ) : MoviesRepository {
 
     override fun getCachedFirstMovies(
@@ -147,7 +150,9 @@ class MoviesRepositoryImpl @Inject constructor(
     ): ResultWrapper<MovieDetail> {
         return try {
             val movieDetailDto = moviesApi.getMovieDetails(movieId, language)
-            val movieDetail = movieDetailMapper.map(movieDetailDto)
+            val username = userPreferencesManager.userPreferencesFlow.first().userName
+            val movieDetail = movieDetailMapper.map(movieDetailDto, username)
+
             ResultWrapper.Success(movieDetail)
         } catch (e: HttpException) {
             ResultWrapper.Error(
@@ -268,36 +273,45 @@ class MoviesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveMovie(movie: MovieDetail) {
-        movieDetailDao.save(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.save(movie.copy(username = username))
     }
 
     override suspend fun removeMovie(movie: MovieDetail) {
-        movieDetailDao.delete(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.delete(movie.copy(username = username))
     }
 
     override suspend fun toggleMovieLike(movie: MovieDetail) {
-        movieDetailDao.toggleMovieLike(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.toggleMovieLike(movie.copy(username = username))
     }
 
     override suspend fun toggleMovieWatched(movie: MovieDetail) {
-        movieDetailDao.toggleMovieWatched(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.toggleMovieWatched(movie.copy(username = username))
     }
 
     override suspend fun toggleMovieUnwatched(movie: MovieDetail) {
-        movieDetailDao.toggleMovieUnwatched(movie)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        movieDetailDao.toggleMovieUnwatched(movie.copy(username = username))
     }
 
     override suspend fun isMovieSaved(id: Int): Boolean {
-        return movieDetailDao.isMovieSaved(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return movieDetailDao.isMovieSaved(id, username)
     }
 
     override suspend fun isMovieUnwatched(id: Int): Boolean {
-        return movieDetailDao.isMovieUnwatched(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return movieDetailDao.isMovieUnwatched(id, username)
     }
 
     override suspend fun isMovieWatched(id: Int): Boolean {
-        return movieDetailDao.isMovieWatched(id)
+        val username = userPreferencesManager.userPreferencesFlow.first().userName
+        return movieDetailDao.isMovieWatched(id, username)
     }
 
-    override fun getSavedMovies(): Flow<List<MovieDetail>> = movieDetailDao.getSavedMovies()
+    override fun getSavedMovies(username: String): Flow<List<MovieDetail>> =
+        movieDetailDao.getSavedMovies(username)
 }

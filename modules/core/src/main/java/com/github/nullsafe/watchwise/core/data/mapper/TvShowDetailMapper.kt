@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class TvShowDetailMapper @Inject constructor() {
 
-    fun map(dto: TvShowDetailDto): TvShowDetail {
+    fun map(dto: TvShowDetailDto, username: String): TvShowDetail {
         return TvShowDetail(
             id = dto.id,
             backdropPath = dto.backdropPath,
@@ -51,7 +51,8 @@ class TvShowDetailMapper @Inject constructor() {
             voteCount = dto.voteCount,
             similarTvShows = emptyList(),
             creditsCasts = emptyList(),
-            liked = false
+            liked = false,
+            username = username
         )
     }
 

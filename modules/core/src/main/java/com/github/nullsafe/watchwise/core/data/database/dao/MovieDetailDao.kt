@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDetailDao {
 
-    @Query("SELECT * FROM MovieDetail WHERE id = :id")
-    suspend fun getById(id: Int): MovieDetail?
+    @Query("SELECT * FROM MovieDetail WHERE id = :id AND username = :username")
+    suspend fun getById(id: Int, username: String): MovieDetail?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(movieDetail: MovieDetail)
@@ -18,7 +18,7 @@ interface MovieDetailDao {
 
     @Transaction
     suspend fun toggleMovieLike(movie: MovieDetail) {
-        val existing = getById(movie.id)
+        val existing = getById(movie.id, movie.username)
         if (existing == null) {
             save(movie.copy(liked = true))
         } else {
@@ -28,7 +28,7 @@ interface MovieDetailDao {
 
     @Transaction
     suspend fun toggleMovieWatched(movie: MovieDetail) {
-        val existing = getById(movie.id)
+        val existing = getById(movie.id, movie.username)
         if (existing == null) {
             save(movie.copy(isWatched = true))
         } else {
@@ -38,7 +38,7 @@ interface MovieDetailDao {
 
     @Transaction
     suspend fun toggleMovieUnwatched(movie: MovieDetail) {
-        val existing = getById(movie.id)
+        val existing = getById(movie.id, movie.username)
         if (existing == null) {
             save(movie.copy(isUnwatched = true))
         } else {
@@ -46,25 +46,24 @@ interface MovieDetailDao {
         }
     }
 
-    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND liked = 1)")
-    suspend fun isMovieSaved(id: Int): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND username = :username AND liked = 1)")
+    suspend fun isMovieSaved(id: Int, username: String): Boolean
 
-    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND isWatched = 1)")
-    suspend fun isMovieWatched(id: Int): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND username = :username AND isWatched = 1)")
+    suspend fun isMovieWatched(id: Int, username: String): Boolean
 
-    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND isUnwatched = 1)")
-    suspend fun isMovieUnwatched(id: Int): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM MovieDetail WHERE id = :id AND username = :username AND isUnwatched = 1)")
+    suspend fun isMovieUnwatched(id: Int, username: String): Boolean
 
-    @Query("SELECT * FROM MovieDetail WHERE liked = 1")
-    fun getSavedMovies(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE liked = 1 AND username = :username")
+    fun getSavedMovies(username: String): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE isUnwatched = 1")
-    fun getMoviesUnwatch(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE isUnwatched = 1 AND username = :username")
+    fun getMoviesUnwatch(username: String): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE isWatched = 1")
-    fun getMoviesWatched(): Flow<List<MovieDetail>>
+    @Query("SELECT * FROM MovieDetail WHERE isWatched = 1 AND username = :username")
+    fun getMoviesWatched(username: String): Flow<List<MovieDetail>>
 
-    @Query("SELECT * FROM MovieDetail WHERE liked = 1")
-    fun getMoviesFavourites(): Flow<List<MovieDetail>>
-
+    @Query("SELECT * FROM MovieDetail WHERE liked = 1 AND username = :username")
+    fun getMoviesFavourites(username: String): Flow<List<MovieDetail>>
 }
