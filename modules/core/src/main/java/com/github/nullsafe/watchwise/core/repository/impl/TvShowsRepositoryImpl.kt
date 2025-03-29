@@ -21,14 +21,15 @@ import com.github.nullsafe.watchwise.core.common.network.ResultWrapper
 import com.github.nullsafe.watchwise.core.data.database.entity.CreditsCast
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShowDetail
 import com.github.nullsafe.watchwise.core.data.database.entity.Video
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
 import com.github.nullsafe.watchwise.core.data.dto.movie.ExternalIds
 import com.github.nullsafe.watchwise.core.data.mapper.CreditsCastMapper
 import com.github.nullsafe.watchwise.core.data.mapper.TvShowDetailMapper
 import com.github.nullsafe.watchwise.core.data.mapper.VideoMapper
 import com.github.nullsafe.watchwise.core.pager.tv_shows.SimilarOrRecommendedTvShowsPagingSource
 import com.github.nullsafe.watchwise.core.pager.tv_shows.TvShowsPagingSource
-import com.github.nullsafe.watchwise.core.session.UserSessionManager
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -40,7 +41,8 @@ class TvShowsRepositoryImpl @Inject constructor(
     private val tvShowDetailMapper: TvShowDetailMapper,
     private val creditsMapper: CreditsCastMapper,
     private val videoMapper: VideoMapper,
-    private val stringProvider: StringProvider
+    private val stringProvider: StringProvider,
+    private val userPreferencesManager: UserPreferencesManager
 ) : TvShowsRepository {
 
     override fun getCachedTvShows(
@@ -128,7 +130,7 @@ class TvShowsRepositoryImpl @Inject constructor(
     ): ResultWrapper<TvShowDetail> {
         return try {
             val tvShowDetailDto = tvShowsApi.getTvShowDetail(tvShowId, language)
-            val username = UserSessionManager.activeProfile ?: ""
+            val username = userPreferencesManager.userPreferencesFlow.first().userName
             val tvShowDetail = tvShowDetailMapper.map(tvShowDetailDto, username)
             ResultWrapper.Success(tvShowDetail)
         } catch (e: Exception) {

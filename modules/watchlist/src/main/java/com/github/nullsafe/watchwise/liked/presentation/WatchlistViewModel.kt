@@ -10,13 +10,14 @@ import com.github.nullsafe.watchwise.core.data.database.dao.MovieDetailDao
 import com.github.nullsafe.watchwise.core.data.database.dao.TvShowDetailDao
 import com.github.nullsafe.watchwise.core.data.database.entity.MovieDetail
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShowDetail
-import com.github.nullsafe.watchwise.core.session.UserSessionManager
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,7 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WatchlistViewModel @Inject constructor(
     movieDao: MovieDetailDao,
-    tvShowDao: TvShowDetailDao
+    tvShowDao: TvShowDetailDao,
+    userPreferencesManager: UserPreferencesManager
 ) : ViewModel() {
 
     var state by mutableStateOf(WatchlistState())
@@ -35,29 +37,29 @@ class WatchlistViewModel @Inject constructor(
     private val _effect = Channel<WatchlistEffect>()
     val effect = _effect.receiveAsFlow()
 
-    private val username = UserSessionManager.activeProfile ?: ""
-
-    private val moviesToWatch = movieDao.getMoviesUnwatch(username)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    private val moviesSeen = movieDao.getMoviesWatched(username)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    private val moviesFavourites = movieDao.getMoviesFavourites(username)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    private val tvShowsToWatch = tvShowDao.getTvShowsUnwatched(username)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    private val tvShowsSeen = tvShowDao.getTvShowsWatched(username)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    private val tvShowsFavourites = tvShowDao.getTvShowsFavourites(username)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
     init {
         viewModelScope.launch {
-            Log.d("WatchlistViewModel", "Start loading watchlist items")
+            val username = userPreferencesManager.userPreferencesFlow.first().userName
+            Log.d("WatchlistViewModel", "Loaded username from preferences: $username")
+
+            val moviesToWatch = movieDao.getMoviesUnwatch(username)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+            val moviesSeen = movieDao.getMoviesWatched(username)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+            val moviesFavourites = movieDao.getMoviesFavourites(username)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+            val tvShowsToWatch = tvShowDao.getTvShowsUnwatched(username)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+            val tvShowsSeen = tvShowDao.getTvShowsWatched(username)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+            val tvShowsFavourites = tvShowDao.getTvShowsFavourites(username)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
             try {
                 withTimeout(5000) {
                     combine(
@@ -68,8 +70,6 @@ class WatchlistViewModel @Inject constructor(
                         tvShowsSeen,
                         tvShowsFavourites
                     ) { flows ->
-                        Log.d("WatchlistViewModel", "Combine block executed")
-
                         val toWatchMovies = flows[0] as List<MovieDetail>
                         val seenMovies = flows[1] as List<MovieDetail>
                         val favouriteMovies = flows[2] as List<MovieDetail>
@@ -77,12 +77,7 @@ class WatchlistViewModel @Inject constructor(
                         val seenTvShows = flows[4] as List<TvShowDetail>
                         val favouriteTvShows = flows[5] as List<TvShowDetail>
 
-                        Log.d("WatchlistViewModel", "Movies to watch: ${toWatchMovies.size}")
-                        Log.d("WatchlistViewModel", "Movies seen: ${seenMovies.size}")
-                        Log.d("WatchlistViewModel", "Movies favourites: ${favouriteMovies.size}")
-                        Log.d("WatchlistViewModel", "TV shows to watch: ${toWatchTvShows.size}")
-                        Log.d("WatchlistViewModel", "TV shows seen: ${seenTvShows.size}")
-                        Log.d("WatchlistViewModel", "TV shows favourites: ${favouriteTvShows.size}")
+                        Log.d("WatchlistViewModel", "Watchlist: loaded for $username")
 
                         state = state.copy(
                             toWatch = toWatchMovies.map { WatchlistItem.Movie(it) } + toWatchTvShows.map { WatchlistItem.TvShow(it) },

@@ -14,6 +14,7 @@ import com.github.nullsafe.watchwise.core.data.database.entity.Movie
 import com.github.nullsafe.watchwise.core.data.database.entity.MovieDetail
 import com.github.nullsafe.watchwise.core.data.database.entity.MovieType
 import com.github.nullsafe.watchwise.core.data.database.entity.Video
+import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
 import com.github.nullsafe.watchwise.core.data.dto.movie.ExternalIds
 import com.github.nullsafe.watchwise.core.data.mapper.CreditsCastMapper
 import com.github.nullsafe.watchwise.core.data.mapper.MovieDetailMapper
@@ -22,9 +23,9 @@ import com.github.nullsafe.watchwise.core.data.mapper.VideoMapper
 import com.github.nullsafe.watchwise.core.pager.movies.MoviesPagingSource
 import com.github.nullsafe.watchwise.core.pager.movies.SimilarOrRecommendedMoviesPagingSource
 import com.github.nullsafe.watchwise.core.repository.MoviesRepository
-import com.github.nullsafe.watchwise.core.session.UserSessionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -40,7 +41,8 @@ class MoviesRepositoryImpl @Inject constructor(
     private val creditsMapper: CreditsCastMapper,
     private val movieDetailMapper: MovieDetailMapper,
     private val videoMapper: VideoMapper,
-    private val stringProvider: StringProvider
+    private val stringProvider: StringProvider,
+    private val userPreferencesManager: UserPreferencesManager
 ) : MoviesRepository {
 
     override fun getCachedFirstMovies(
@@ -148,7 +150,7 @@ class MoviesRepositoryImpl @Inject constructor(
     ): ResultWrapper<MovieDetail> {
         return try {
             val movieDetailDto = moviesApi.getMovieDetails(movieId, language)
-            val username = UserSessionManager.activeProfile ?: ""
+            val username = userPreferencesManager.userPreferencesFlow.first().userName
             val movieDetail = movieDetailMapper.map(movieDetailDto, username)
 
             ResultWrapper.Success(movieDetail)

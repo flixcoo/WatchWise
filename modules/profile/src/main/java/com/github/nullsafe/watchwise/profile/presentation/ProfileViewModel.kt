@@ -9,9 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.compose.runtime.State
 import com.github.nullsafe.watchwise.core.data.datastore.UserPreferencesManager
-import com.github.nullsafe.watchwise.core.session.UserSessionManager
 import kotlinx.coroutines.flow.collectLatest
-
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -28,10 +26,7 @@ class ProfileViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             userPreferencesManager.userPreferencesFlow.collectLatest { prefs ->
-                if (prefs.userName.isNotEmpty()) {
-                    _activeProfile.value = prefs.userName
-                    UserSessionManager.activeProfile = prefs.userName
-                }
+                _activeProfile.value = prefs.userName.takeIf { it.isNotEmpty() }
             }
         }
     }
@@ -43,7 +38,6 @@ class ProfileViewModel @Inject constructor(
             loading.value = false
             if (success) {
                 _activeProfile.value = username
-                UserSessionManager.activeProfile = username
                 userPreferencesManager.updateUserName(username)
                 error.value = null
             } else {
@@ -59,7 +53,6 @@ class ProfileViewModel @Inject constructor(
             loading.value = false
             if (success) {
                 _activeProfile.value = username
-                UserSessionManager.activeProfile = username
                 userPreferencesManager.updateUserName(username)
                 error.value = null
             } else {
@@ -71,7 +64,6 @@ class ProfileViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             _activeProfile.value = null
-            UserSessionManager.activeProfile = null
             userPreferencesManager.clearUserName()
             error.value = null
         }
@@ -93,7 +85,7 @@ class ProfileViewModel @Inject constructor(
             loading.value = false
             if (success) {
                 _activeProfile.value = null
-                UserSessionManager.activeProfile = null
+                userPreferencesManager.clearUserName()
                 error.value = null
             } else {
                 error.value = "Delete failed"
