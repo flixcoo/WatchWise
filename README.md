@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Version-0.0.5-orange)
+![Version](https://img.shields.io/badge/Version-1.0.0-orange)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-7F52FF?logo=kotlin)
 ![Android](https://img.shields.io/badge/Android-15.0-3DDC84?logo=android)
 ![Azure Functions](https://img.shields.io/badge/Azure_Functions-v4-white?logo=azure-functions)
