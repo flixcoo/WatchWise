@@ -407,7 +407,7 @@ fun ProfileScreen(
                                 containerColor = Color(0xFF555555)
                             )
                         ) {
-                            Text(context.getString(R.string.change_profile))
+                            Text(context.getString(R.string.change_password))
                         }
                         Spacer(modifier = Modifier.height(12.dp))
 
