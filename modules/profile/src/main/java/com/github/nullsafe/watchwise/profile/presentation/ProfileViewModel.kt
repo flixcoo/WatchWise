@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
     private val userPreferencesManager: UserPreferencesManager
 ) : ViewModel() {
 
