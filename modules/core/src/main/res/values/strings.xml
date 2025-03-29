@@ -127,5 +127,15 @@
     <string name="active_profile">Active Profile</string>
     <string name="change_profile">Change Profile</string>
     <string name="delete_profile">Delete Profile</string>
+    <string name="login_profile">Login</string>
+    <string name="new_password_profile">New Password</string>
+    <string name="confirm_profile">Confirm</string>
+    <string name="cancel_profile">Cancel</string>
+    <string name="logout_profile">Logout</string>
+    <string name="rule1_profile">At least 8 characters</string>
+    <string name="rule2_profile">At least 1 capital letter</string>
+    <string name="rule3_profile">At least 1 lowercase letter</string>
+    <string name="rule4_profile">At least 1 numberAt least 1 number</string>
+    <string name="rule5_profile">At least 1 special character</string>
 
 </resources>
