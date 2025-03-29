@@ -205,7 +205,7 @@ fun ProfileScreen(
                             .height(56.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
+                            containerColor = AppTheme.colors.type.ghost,
                             contentColor = AppTheme.colors.type.inverse
                         )
                     ) {
@@ -234,7 +234,7 @@ fun ProfileScreen(
                             .height(56.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = AppTheme.colors.type.success,
+                            containerColor = AppTheme.colors.theme.tint.copy(alpha = 0.9f),
                             contentColor = AppTheme.colors.type.inverse
                         )
                     ) {
