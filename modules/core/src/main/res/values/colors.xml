@@ -34,5 +34,6 @@
 
     <color name="dividerLight">#0D000000</color>
     <color name="dividerDark">#0DFFFFFF</color>
+    <color name="logo_background">#191919</color>
 
 </resources>
