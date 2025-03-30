@@ -33,7 +33,7 @@ Additional Features:
 - **Navigation Component** for fragment navigation
 - **Dagger2** for dependency injection
 - **Room** for local data persistence
-- **Azure Functions** for cloud-based features (e.g., user data)
+- **Azure Functions** for cloud-based features (user data)
 
 ---
 
