@@ -20,53 +20,42 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ErrorOutline
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import com.github.nullsafe.watchwise.compose.components.empty_state.EmptyStateView
-import com.github.nullsafe.watchwise.compose.components.rating.RatingBar
-import com.github.nullsafe.watchwise.compose.components.topbar.AppCenterAlignedTopAppBar
-import com.github.nullsafe.watchwise.compose.components.video_player.YouTubeThumbnail
-import com.github.nullsafe.watchwise.core.common.helper.ImageProvider
-import com.github.nullsafe.watchwise.core.data.database.entity.Video
-import com.github.nullsafe.watchwise.detail.tvshowdetail.presentation.state.TvShowDetailsAction
-import com.github.nullsafe.watchwise.detail.tvshowdetail.presentation.state.TvShowDetailsState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.CheckCircleOutline
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -74,21 +63,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import coil.compose.AsyncImage
 import com.github.nullsafe.watchwise.compose.components.cards.ItemCard
 import com.github.nullsafe.watchwise.compose.components.chips.ChipView
 import com.github.nullsafe.watchwise.compose.components.divider.AppHorizontalDivider
+import com.github.nullsafe.watchwise.compose.components.empty_state.EmptyStateView
 import com.github.nullsafe.watchwise.compose.components.headlines.HeadlinePrimaryActionView
+import com.github.nullsafe.watchwise.compose.components.rating.RatingBar
 import com.github.nullsafe.watchwise.compose.components.shimmer.shimmerBackground
+import com.github.nullsafe.watchwise.compose.components.topbar.AppCenterAlignedTopAppBar
+import com.github.nullsafe.watchwise.compose.components.video_player.YouTubeThumbnail
 import com.github.nullsafe.watchwise.compose.theme.AppTheme
 import com.github.nullsafe.watchwise.core.R
+import com.github.nullsafe.watchwise.core.common.helper.ImageProvider
 import com.github.nullsafe.watchwise.core.common.helper.SocialMediaProvider
 import com.github.nullsafe.watchwise.core.data.database.entity.CreditsCast
 import com.github.nullsafe.watchwise.core.data.database.entity.MediaType
 import com.github.nullsafe.watchwise.core.data.database.entity.ProductionCompany
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShow
 import com.github.nullsafe.watchwise.core.data.database.entity.TvShowType
+import com.github.nullsafe.watchwise.core.data.database.entity.Video
+import com.github.nullsafe.watchwise.detail.tvshowdetail.presentation.state.TvShowDetailsAction
+import com.github.nullsafe.watchwise.detail.tvshowdetail.presentation.state.TvShowDetailsState
 import com.github.nullsafe.watchwise.util.extension.getYearFromReleaseDate
 import kotlinx.coroutines.launch
 
@@ -120,7 +120,7 @@ fun TvShowDetailsScreen(
                                 onClick = {
                                     onAction(TvShowDetailsAction.ToggleUnwatched)
 
-                                    state.tvShow?.unwatched?.let{
+                                    state.tvShow?.unwatched?.let {
                                         val unwatched = !state.tvShow.unwatched
 
                                         val message = if (unwatched) {
@@ -139,20 +139,22 @@ fun TvShowDetailsScreen(
                                         }
                                     }
                                 }
-                            ) { Icon(
-                                imageVector = if (state.tvShow?.unwatched == true)
-                                    Icons.Filled.VisibilityOff
-                                else
-                                    Icons.Outlined.VisibilityOff,
-                                contentDescription = "",
-                                tint = if (state.tvShow?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
-                            )}
+                            ) {
+                                Icon(
+                                    imageVector = if (state.tvShow?.unwatched == true)
+                                        Icons.Filled.Visibility
+                                    else
+                                        Icons.Outlined.Visibility,
+                                    contentDescription = "",
+                                    tint = if (state.tvShow?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                )
+                            }
 
                             IconButton(
                                 onClick = {
                                     onAction(TvShowDetailsAction.ToggleWatched)
 
-                                    state.tvShow?.watched?.let{
+                                    state.tvShow?.watched?.let {
                                         val watched = !state.tvShow.watched
 
                                         val message = if (watched) {
@@ -171,14 +173,16 @@ fun TvShowDetailsScreen(
                                         }
                                     }
                                 }
-                            ) { Icon(
-                                imageVector = if (state.tvShow?.watched == true)
-                                    Icons.Filled.CheckCircle
-                                else
-                                    Icons.Outlined.CheckCircleOutline,
-                                contentDescription = "",
-                                tint = if (state.tvShow?.watched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
-                            )}
+                            ) {
+                                Icon(
+                                    imageVector = if (state.tvShow?.watched == true)
+                                        Icons.Filled.CheckCircle
+                                    else
+                                        Icons.Outlined.CheckCircleOutline,
+                                    contentDescription = "",
+                                    tint = if (state.tvShow?.watched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                )
+                            }
                             IconButton(
                                 onClick = {
                                     onAction(TvShowDetailsAction.ToggleLike)
@@ -419,7 +423,8 @@ private fun TvShowInformation(state: TvShowDetailsState) {
         }
 
 
-        val productionCountries = state.tvShow?.productionCountries?.joinToString { it.name.orEmpty() }
+        val productionCountries =
+            state.tvShow?.productionCountries?.joinToString { it.name.orEmpty() }
 
         val sb2 = StringBuilder()
 

@@ -30,11 +30,10 @@ import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -122,7 +121,7 @@ fun MovieDetailsScreen(
                                 onClick = {
                                     onAction(MovieDetailsAction.ToggleUnwatched)
 
-                                    state.movie?.unwatched?.let{
+                                    state.movie?.unwatched?.let {
                                         val unwatched = !state.movie.unwatched
 
                                         val message = if (unwatched) {
@@ -141,19 +140,21 @@ fun MovieDetailsScreen(
                                         }
                                     }
                                 }
-                            ) { Icon(
-                                imageVector = if (state.movie?.unwatched == true)
-                                    Icons.Filled.VisibilityOff
-                                else
-                                    Icons.Outlined.VisibilityOff,
-                                contentDescription = "",
-                                tint = if (state.movie?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
-                            )}
+                            ) {
+                                Icon(
+                                    imageVector = if (state.movie?.unwatched == true)
+                                        Icons.Filled.Visibility
+                                    else
+                                        Icons.Outlined.Visibility,
+                                    contentDescription = "",
+                                    tint = if (state.movie?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                )
+                            }
                             IconButton(
                                 onClick = {
                                     onAction(MovieDetailsAction.ToggleWatched)
 
-                                    state.movie?.watched?.let{
+                                    state.movie?.watched?.let {
                                         val watched = !state.movie.watched
 
                                         val message = if (watched) {
@@ -172,14 +173,16 @@ fun MovieDetailsScreen(
                                         }
                                     }
                                 }
-                            ) { Icon(
-                                imageVector = if (state.movie?.watched == true)
-                                    Icons.Filled.CheckCircle
-                                else
-                                    Icons.Outlined.CheckCircleOutline,
-                                contentDescription = "",
-                                tint = if (state.movie?.watched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
-                            )}
+                            ) {
+                                Icon(
+                                    imageVector = if (state.movie?.watched == true)
+                                        Icons.Filled.CheckCircle
+                                    else
+                                        Icons.Outlined.CheckCircleOutline,
+                                    contentDescription = "",
+                                    tint = if (state.movie?.watched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
+                                )
+                            }
                             IconButton(
                                 onClick = {
                                     onAction(MovieDetailsAction.ToggleLike)
@@ -526,7 +529,8 @@ private fun MovieInformation(state: MovieDetailsState) {
             color = AppTheme.colors.type.secondary
         )
 
-        val productionCountries = state.movie?.productionCountries?.joinToString { it.name.orEmpty() }
+        val productionCountries =
+            state.movie?.productionCountries?.joinToString { it.name.orEmpty() }
         val runtime = state.movie?.runtime?.convertMinutesToHoursAndMinutes()
 
         val sb2 = StringBuilder()
