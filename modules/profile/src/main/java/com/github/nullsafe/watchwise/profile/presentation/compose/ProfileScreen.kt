@@ -76,6 +76,9 @@ fun ProfileScreen(
     var usernameError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
 
+    var showNewPasswordValidation by remember { mutableStateOf(false) }
+    var newPasswordError by remember { mutableStateOf<String?>(null) }
+
     val activeProfile by viewModel.activeProfile
     val isLoading by viewModel.loading
     var error by viewModel.error
