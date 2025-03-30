@@ -12,7 +12,7 @@
   
 WatchWise is a modern Android app built with a multi-module structure, one main activity, and several fragments. It combines local storage (Room) with cloud functionality (Azure Functions) and uses the TMDB API.
 
-![GitLab-Screenshot](./modules/app/images/gitlab.png)
+![GitLab-Screenshot](artefacts/smartphone_mockup/presentation/watchwise-presentation-v3.png)
 
 
 ### Home Screen Features:
