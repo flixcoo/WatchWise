@@ -145,7 +145,7 @@ fun MovieDetailsScreen(
                                     imageVector = if (state.movie?.unwatched == true)
                                         Icons.Filled.Visibility
                                     else
-                                        Icons.Outlined.Visibility,
+                                        Icons.Filled.Visibility,
                                     contentDescription = "",
                                     tint = if (state.movie?.unwatched == true) AppTheme.colors.theme.tint else AppTheme.colors.type.secondary
                                 )
