@@ -638,5 +638,3 @@ fun hasUpperCase(pw: String) = pw.any { it.isUpperCase() }
 fun hasLowerCase(pw: String) = pw.any { it.isLowerCase() }
 fun hasDigit(pw: String) = pw.any { it.isDigit() }
 fun hasSpecialChar(pw: String) = pw.any { "!@#\$%^&*()_+-=[]{}|;:'\",.<>?/".contains(it) }
-
-
