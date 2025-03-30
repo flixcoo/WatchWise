@@ -76,11 +76,14 @@ fun ProfileScreen(
     var usernameError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
 
+    var showNewPasswordValidation by remember { mutableStateOf(false) }
+    var newPasswordError by remember { mutableStateOf<String?>(null) }
+
     val activeProfile by viewModel.activeProfile
     val isLoading by viewModel.loading
     var error by viewModel.error
 
-    var errorRed = Color(0xFFFF6F61)
+    val errorRed = Color(0xFFFF6F61)
 
     Scaffold(
         topBar = {
@@ -458,6 +461,46 @@ fun ProfileScreen(
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
                     )
 
+                    if (showNewPasswordValidation) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            AppTheme.colors.background.ghost.copy(alpha = 0.9f),
+                                            AppTheme.colors.background.ghost.copy(alpha = 0.5f)
+                                        )
+                                    ),
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = AppTheme.colors.background.border,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .padding(16.dp)
+                        ) {
+                            Column {
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_1), hasMinLength(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_2), hasUpperCase(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_3), hasLowerCase(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_4), hasDigit(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_5), hasSpecialChar(newPassword))
+                            }
+                        }
+                    }
+
+                    if (newPasswordError != null) {
+                        Text(
+                            text = newPasswordError!!,
+                            color = errorRed,
+                            style = AppTheme.typography.body,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row(
@@ -466,9 +509,26 @@ fun ProfileScreen(
                     ) {
                         Button(
                             onClick = {
-                                viewModel.updatePassword(activeProfile!!, newPassword)
-                                newPassword = ""
-                                showPasswordUpdateScreen = false
+                                showNewPasswordValidation = true
+                                newPasswordError = null
+                                error = null
+
+                                val isValid = hasMinLength(newPassword)
+                                        && hasUpperCase(newPassword)
+                                        && hasLowerCase(newPassword)
+                                        && hasDigit(newPassword)
+                                        && hasSpecialChar(newPassword)
+
+                                if (!isValid) {
+                                    newPasswordError = context.getString(R.string.login_error_5)
+                                }
+
+                                if (newPasswordError == null) {
+                                    viewModel.updatePassword(activeProfile!!, newPassword)
+                                    newPassword = ""
+                                    showPasswordUpdateScreen = false
+                                    showNewPasswordValidation = false
+                                }
                             },
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(16.dp),
@@ -578,6 +638,3 @@ fun hasUpperCase(pw: String) = pw.any { it.isUpperCase() }
 fun hasLowerCase(pw: String) = pw.any { it.isLowerCase() }
 fun hasDigit(pw: String) = pw.any { it.isDigit() }
 fun hasSpecialChar(pw: String) = pw.any { "!@#\$%^&*()_+-=[]{}|;:'\",.<>?/".contains(it) }
-
-
-
