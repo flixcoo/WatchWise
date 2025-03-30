@@ -461,6 +461,46 @@ fun ProfileScreen(
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
                     )
 
+                    if (showNewPasswordValidation) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            AppTheme.colors.background.ghost.copy(alpha = 0.9f),
+                                            AppTheme.colors.background.ghost.copy(alpha = 0.5f)
+                                        )
+                                    ),
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = AppTheme.colors.background.border,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .padding(16.dp)
+                        ) {
+                            Column {
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_1), hasMinLength(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_2), hasUpperCase(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_3), hasLowerCase(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_4), hasDigit(newPassword))
+                                RuleCheck(context.getString(R.string.passwort_rulecheck_5), hasSpecialChar(newPassword))
+                            }
+                        }
+                    }
+
+                    if (newPasswordError != null) {
+                        Text(
+                            text = newPasswordError!!,
+                            color = errorRed,
+                            style = AppTheme.typography.body,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row(
