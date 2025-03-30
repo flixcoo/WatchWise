@@ -83,7 +83,7 @@ fun ProfileScreen(
     val isLoading by viewModel.loading
     var error by viewModel.error
 
-    var errorRed = Color(0xFFFF6F61)
+    val errorRed = Color(0xFFFF6F61)
 
     Scaffold(
         topBar = {
