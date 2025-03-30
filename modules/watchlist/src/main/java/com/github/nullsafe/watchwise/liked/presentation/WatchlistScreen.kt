@@ -1,7 +1,15 @@
 package com.github.nullsafe.watchwise.liked.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -9,9 +17,21 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.CheckCircleOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -86,13 +106,12 @@ fun WatchlistScreen(
                     ShimmerItem()
                 }
             } else {
-                HorizontalPager(
-                    state = pagerState,
-                ) { page ->
+                HorizontalPager(state = pagerState) { page ->
                     when (page) {
                         WatchlistTabType.TO_WATCH.tabPosition -> {
                             WatchlistItemsList(
                                 items = state.toWatch,
+                                tabType = WatchlistTabType.TO_WATCH,
                                 onAction = onAction
                             )
                         }
@@ -100,6 +119,7 @@ fun WatchlistScreen(
                         WatchlistTabType.SEEN.tabPosition -> {
                             WatchlistItemsList(
                                 items = state.seen,
+                                tabType = WatchlistTabType.SEEN,
                                 onAction = onAction
                             )
                         }
@@ -107,6 +127,7 @@ fun WatchlistScreen(
                         WatchlistTabType.FAVOURITES.tabPosition -> {
                             WatchlistItemsList(
                                 items = state.favourites,
+                                tabType = WatchlistTabType.FAVOURITES,
                                 onAction = onAction
                             )
                         }
@@ -127,7 +148,7 @@ private fun WatchlistTabs(
         divider = { },
         selectedTabIndex = pagerState.currentPage,
         containerColor = AppTheme.colors.background.default,
-        contentColor = AppTheme.colors.type.primary, // Textfarbe der Tabs
+        contentColor = AppTheme.colors.type.primary,
         indicator = { tabPositions ->
             TabIndicator(tabPosition = tabPositions[pagerState.currentPage])
         }
@@ -147,14 +168,34 @@ private fun WatchlistTabs(
 @Composable
 private fun WatchlistItemsList(
     items: List<WatchlistItem>,
+    tabType: WatchlistTabType,
     onAction: (WatchlistAction) -> Unit
 ) {
     if (items.isEmpty()) {
+        val (icon, title) = when (tabType) {
+            WatchlistTabType.TO_WATCH -> Pair(
+                Icons.Outlined.Visibility,
+                stringResource(R.string.watchlist_empty_to_watch_message)
+            )
+
+            WatchlistTabType.SEEN -> Pair(
+                Icons.Outlined.CheckCircleOutline,
+                stringResource(R.string.watchlist_empty_seen_message)
+            )
+
+            WatchlistTabType.FAVOURITES -> Pair(
+                Icons.Outlined.FavoriteBorder,
+                stringResource(R.string.watchlist_empty_favourites_message)
+            )
+        }
+
         EmptyStateView(
-            modifier = Modifier.fillMaxSize(),
-            icon = Icons.Outlined.BookmarkBorder,
-            title = stringResource(id = R.string.watchlist_empty_message),
-            action = stringResource(id = R.string.watchlist_empty_action),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
+            icon = icon,
+            title = title,
+            action = stringResource(R.string.watchlist_empty_action),
             onClick = { onAction(WatchlistAction.BrowseMoviesAndTvShows) }
         )
     } else {

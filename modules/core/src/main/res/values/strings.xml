@@ -103,7 +103,9 @@
     <string name="seen">Seen</string>
     <string name="favourites">Favourites</string>
 
-    <string name="watchlist_empty_message">No Movies or TV shows added yet. Add them now!</string>
+    <string name="watchlist_empty_to_watch_message">No movies or tv shows added yet. Add everything you want to watch here.</string>
+    <string name="watchlist_empty_seen_message">No movies or tv shows added yet. Add all your watched movies and tv shows here.</string>
+    <string name="watchlist_empty_favourites_message">No movies or tv shows added yet. Add all your favorites here.</string>
     <string name="watchlist_empty_action">Browse Movies and TV Shows</string>
 
     <!-- Snackbar Messages for Lists -->

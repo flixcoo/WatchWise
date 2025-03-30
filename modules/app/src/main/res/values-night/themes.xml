@@ -15,7 +15,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/roboto</item>
 
-        <item name="android:windowBackground">@color/logo_background</item>
+        <item name="android:windowBackground">@color/black</item>
 
     </style>
 
