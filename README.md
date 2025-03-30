@@ -44,7 +44,7 @@ Additional Features:
 | Coroutines     | Asynchronous tasks               |
 | Room           | Local database                   |
 | Retrofit2      | Network communication            |
-| Glide          | Image loading                    |
+| Coil          | Image loading                    |
 
 ---
 
