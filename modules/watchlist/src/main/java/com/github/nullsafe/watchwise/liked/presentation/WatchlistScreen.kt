@@ -111,7 +111,7 @@ fun WatchlistScreen(
                         WatchlistTabType.TO_WATCH.tabPosition -> {
                             WatchlistItemsList(
                                 items = state.toWatch,
-                                tabType = WatchlistTabType.TO_WATCH,  // Wichtig: Korrekter TabType
+                                tabType = WatchlistTabType.TO_WATCH,
                                 onAction = onAction
                             )
                         }
@@ -119,7 +119,7 @@ fun WatchlistScreen(
                         WatchlistTabType.SEEN.tabPosition -> {
                             WatchlistItemsList(
                                 items = state.seen,
-                                tabType = WatchlistTabType.SEEN,  // Wichtig: Korrekter TabType
+                                tabType = WatchlistTabType.SEEN,
                                 onAction = onAction
                             )
                         }
@@ -127,7 +127,7 @@ fun WatchlistScreen(
                         WatchlistTabType.FAVOURITES.tabPosition -> {
                             WatchlistItemsList(
                                 items = state.favourites,
-                                tabType = WatchlistTabType.FAVOURITES,  // Wichtig: Korrekter TabType
+                                tabType = WatchlistTabType.FAVOURITES,
                                 onAction = onAction
                             )
                         }
@@ -148,7 +148,7 @@ private fun WatchlistTabs(
         divider = { },
         selectedTabIndex = pagerState.currentPage,
         containerColor = AppTheme.colors.background.default,
-        contentColor = AppTheme.colors.type.primary, // Textfarbe der Tabs
+        contentColor = AppTheme.colors.type.primary,
         indicator = { tabPositions ->
             TabIndicator(tabPosition = tabPositions[pagerState.currentPage])
         }
@@ -174,17 +174,17 @@ private fun WatchlistItemsList(
     if (items.isEmpty()) {
         val (icon, title) = when (tabType) {
             WatchlistTabType.TO_WATCH -> Pair(
-                Icons.Outlined.Visibility,  // Icon für "To Watch"
+                Icons.Outlined.Visibility,
                 stringResource(R.string.watchlist_empty_to_watch_message)
             )
 
             WatchlistTabType.SEEN -> Pair(
-                Icons.Outlined.CheckCircleOutline,  // Icon für "Seen"
+                Icons.Outlined.CheckCircleOutline,
                 stringResource(R.string.watchlist_empty_seen_message)
             )
 
             WatchlistTabType.FAVOURITES -> Pair(
-                Icons.Outlined.FavoriteBorder,  // Icon für "Favorites"
+                Icons.Outlined.FavoriteBorder,
                 stringResource(R.string.watchlist_empty_favourites_message)
             )
         }
@@ -193,7 +193,7 @@ private fun WatchlistItemsList(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp),
-            icon = icon,  // Hier wird das tab-spezifische Icon verwendet
+            icon = icon,
             title = title,
             action = stringResource(R.string.watchlist_empty_action),
             onClick = { onAction(WatchlistAction.BrowseMoviesAndTvShows) }
