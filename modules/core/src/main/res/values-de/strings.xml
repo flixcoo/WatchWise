@@ -103,7 +103,9 @@
     <string name="seen">Gesehen</string>
     <string name="favourites">Favoriten</string>
 
-    <string name="watchlist_empty_message">Noch keine Filme oder Serien hinzugefügt. Füge jetzt welche hinzu!</string>
+    <string name="watchlist_empty_to_watch_message">todo 1</string>
+    <string name="watchlist_empty_seen_message">todo 2</string>
+    <string name="watchlist_empty_favourites_message">todo 3</string>
     <string name="watchlist_empty_action">Filme und Serien durchsuchen</string>
 
     <!-- Snackbar Messages for Lists -->
