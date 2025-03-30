@@ -509,9 +509,26 @@ fun ProfileScreen(
                     ) {
                         Button(
                             onClick = {
-                                viewModel.updatePassword(activeProfile!!, newPassword)
-                                newPassword = ""
-                                showPasswordUpdateScreen = false
+                                showNewPasswordValidation = true
+                                newPasswordError = null
+                                error = null
+
+                                val isValid = hasMinLength(newPassword)
+                                        && hasUpperCase(newPassword)
+                                        && hasLowerCase(newPassword)
+                                        && hasDigit(newPassword)
+                                        && hasSpecialChar(newPassword)
+
+                                if (!isValid) {
+                                    newPasswordError = context.getString(R.string.login_error_5)
+                                }
+
+                                if (newPasswordError == null) {
+                                    viewModel.updatePassword(activeProfile!!, newPassword)
+                                    newPassword = ""
+                                    showPasswordUpdateScreen = false
+                                    showNewPasswordValidation = false
+                                }
                             },
                             modifier = Modifier.weight(1f),
                             shape = RoundedCornerShape(16.dp),
@@ -621,6 +638,5 @@ fun hasUpperCase(pw: String) = pw.any { it.isUpperCase() }
 fun hasLowerCase(pw: String) = pw.any { it.isLowerCase() }
 fun hasDigit(pw: String) = pw.any { it.isDigit() }
 fun hasSpecialChar(pw: String) = pw.any { "!@#\$%^&*()_+-=[]{}|;:'\",.<>?/".contains(it) }
-
 
 
