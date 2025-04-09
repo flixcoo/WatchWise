@@ -1,7 +1,7 @@
 ![Version](https://img.shields.io/badge/Version-1.0.0-orange)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-7F52FF?logo=kotlin)
 ![Android](https://img.shields.io/badge/Android-15.0-3DDC84?logo=android)
-![Azure Functions](https://img.shields.io/badge/Azure_Functions-v4-white?logo=azure-functions)
+![Azure Functions](https://img.shields.io/badge/Azure_Functions-Offline-white?logo=azure-functions)
 ![Powered by TMDB](https://img.shields.io/badge/Powered_by_TMDB-555555?logo=themoviedatabase&logoColor=01D277)
 
 ---
@@ -77,6 +77,10 @@ Additional Features:
    - Configure using `build.gradle`
    - Run via Android Studio or CLI
 
+### ⚠️ Note
+
+The Azure Functions Backend is currently not functional due to limited access to Microsoft Azure. Features relying on cloud integration, such as user data synchronization, are no longer available.
+
 ---
 
 ## 🏪 App Store Description
@@ -92,9 +96,4 @@ Additional Features:
 
 ---
 
-## 💬 Feedback & Development
-Got feedback or ideas? Feel free to open an issue in the repository. We're constantly working on new features and improvements.
-
----
-
-> _Powered by TMDB · Developed with ❤️ using Kotlin & Azure_
+_Powered by TMDB · Developed with ❤️ using Kotlin & Azure_
