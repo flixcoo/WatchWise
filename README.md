@@ -4,6 +4,11 @@
 ![Azure Functions](https://img.shields.io/badge/Azure_Functions-Offline-white?logo=azure-functions)
 ![Powered by TMDB](https://img.shields.io/badge/Powered_by_TMDB-555555?logo=themoviedatabase&logoColor=01D277)
 
+> ### ⚠️ Academic Project Notice
+> *This repository contains examination work for the*  
+> ***Mobile Computing** module at Leipzig University*
+> *of Applied Sciences (HTWK).*
+
 ---
 
 # 🎬 WatchWise
